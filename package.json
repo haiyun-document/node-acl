@@ -1,9 +1,23 @@
 {
-    "name": "application-name"
-  , "version": "0.0.1"
-  , "private": true
-  , "dependencies": {
-      "express": "2.4.3"
-    , "jade": ">= 0.0.1"
-  }
+  "name": "node-acl",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "2.4.3",
+    "jade": ">= 0.0.1"
+  },
+  "devDependencies": {
+    "vows": ">= 0.5.8",
+    "mongoose": ">= 1.7.3"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "author": "Cellkast <feedback@tickade.com>",
+  "description": "Access control list module for Node",
+  "repository": {
+    "type": "git",
+    "url": "git@github-cellkast:cellkast/node-acl.git"
+  },
+  "main": "app.js"
 }
