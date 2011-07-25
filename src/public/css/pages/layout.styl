@@ -1,6 +1,6 @@
 body
   font(1, $base-font-family)
-  background $c-light
+  background linear-gradient-image(400px top, lighten($c-light, 15%), $c-light) $c-light repeat-x
   
 .inner-wrapper
   width $inner-wrapper-width
@@ -29,7 +29,7 @@ html, body
 
 
 #header
-  background $c-mid-cool
+  background linear-gradient-image(gap(2.4) top, lighten($c-mid-cool, 5%), darken($c-mid-cool, 5%))
   border-bottom 2px solid $c-dark-cool
   clearfix()
   
@@ -47,17 +47,18 @@ html, body
     float right
     a
       padding gap(0.75) gap(1) gap(0.25)
-      background lighten($c-dark-cool, 10%)
+      background linear-gradient-image(gap(2.4) top, lighten($c-dark-cool, 25%), darken($c-dark-cool, 5%))
       display block
       font-variant small-caps
       font-size(1.25)
-      //font-family $display-font-family
+      font-family $display-font-family
       color lighten($c-mid-cool, 35%)
       border-top 4px solid darken($c-mid-cool, 60%)
-      &:hover
-        background darken($c-dark-cool, 50%)
-        color lighten($c-light, 10%)
-        border-top-color $c-light
+    li a:hover, .active a
+      background linear-gradient-image(gap(2.4) top, darken($c-dark-cool, 35%), darken($c-dark-cool, 25%))
+      color saturate($c-light, 30%)
+      border-top-color saturate($c-light, 120%)
+    
 
 
 #content

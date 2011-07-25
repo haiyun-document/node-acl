@@ -4,6 +4,7 @@
     inline-block()
     width 33%
     text-align left
+    position relative
   
   header
     border-width 5px 0 2px
@@ -17,6 +18,12 @@
     
   .col-inner    
     padding gap(0.5)
+    
+  section section
+    padding-bottom gap(0.5)
+    margin-bottom gap(0.5)
+    border-width 0 0 1px
+    border-style dotted
 
 .manage-search, .manage-filters
   inline-block()
@@ -45,11 +52,13 @@
   
 .items
   text-align center
-  margin-bottom gap(1)
   
   h1
     text-align left
-    font-size(1.8)
+    text-transform uppercase
+    color #555
+    font-size(1.2)
+    margin-bottom gap(0.5)
     
   article
     inline-block()
@@ -63,8 +72,15 @@
     h2
       color #fff
     
+  item-gradient-bg(base-color)
+    background linear-gradient-image(50px top, lighten(base-color, 50%), lighten(base-color, 30%)) lighten(base-color, 20%)
+    &:hover
+      background linear-gradient-image(50px top, lighten(base-color, 70%), lighten(base-color, 50%)) lighten(base-color, 50%)
+
+    
   .item-request
     width 120px
+    item-gradient-bg($c-dark-warm)
     img, h2
       inline-block(middle)
     img
@@ -74,25 +90,14 @@
     display block
     font-size(1.2)
     text-align center
+    item-gradient-bg(lighten($c-dark-cool, 10%))
     
+  .item-access
+    item-gradient-bg(desaturate($c-dark-cool, 80%))
+    
+  .active
+    item-gradient-bg(darken($c-light, 50%))
   
-      
-item-gradient-bg(base-color)
-  background linear-gradient-image(50px top, lighten(base-color, 50%), lighten(base-color, 30%)) lighten(base-color, 20%)
-  &:hover
-    background linear-gradient-image(50px top, lighten(base-color, 70%), lighten(base-color, 50%)) lighten(base-color, 50%)
-
-.item-request
-  item-gradient-bg($c-dark-warm)
-      
-.item-access-group
-  item-gradient-bg($c-dark-cool)
-
-.item-access
-  item-gradient-bg(desaturate($c-dark-cool, 80%))
-
-.items .active
-  item-gradient-bg(darken($c-light, 50%))
 
 #manage-request
   background lighten($c-mid-warm, 70%)
@@ -103,6 +108,9 @@ item-gradient-bg(base-color)
     
   .items h1
     hide-text()
+  
+  section
+    border-color lighten($c-dark-warm, 80%)
 
 #manage-access
   background lighten($c-mid-cool, 290%)
@@ -110,14 +118,37 @@ item-gradient-bg(base-color)
     border-color $c-dark-cool
     h1, h2
       color $c-mid-cool
+      
+  section
+    border-color lighten($c-dark-cool, 80%)
 
 #manage-shortlist
-  background lighten($c-light, 15%)
+  background lighten($c-light, 8%)
   .col-inner
     border-width 0 5px 0
     border-style solid
-    border-color darken($c-light, 30%)
+    border-color darken($c-light, 40%)
   header
     border-color darken($c-light, 60%)
     h1, h2
       color darken($c-light, 30%)
+  
+  section
+    border-color darken($c-light, 50%)
+  
+  $shadow-width = gap(0.3) 
+  $shadow-pos = 5px
+  
+  .shadow
+    position absolute
+    display block
+    width $shadow-width
+    top 0
+    
+  .shadow-left
+    background linear-gradient-image($shadow-width left, rgba(0,0,0,0.3), rgba(0,0,0,0))
+    left $shadow-pos
+  
+  .shadow-right
+    background linear-gradient-image($shadow-width right, rgba(0,0,0,0.3), rgba(0,0,0,0))
+    right $shadow-pos
