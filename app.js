@@ -21,7 +21,7 @@
   });
   app.get("/", function(req, res) {
     return res.render("index", {
-      title: "Express"
+      title: "node-acl"
     });
   });
   app.listen(3000);

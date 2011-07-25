@@ -1,0 +1,80 @@
+body
+  font(1, $base-font-family)
+  background $c-light
+  
+.inner-wrapper
+  width $inner-wrapper-width
+  min-width $inner-wrapper-min-width
+  margin 0 auto
+  
+// Sticky footer
+$footer-height = gap(1.5)
+html, body
+  height 100%
+#container
+  min-height 100%
+  
+#content
+  padding-bottom $footer-height
+  overflow auto
+
+#footer
+  margin-top -($footer-height)
+  position relative
+  clear both
+
+.ie7 #container
+  display table
+  height 100%
+
+
+#header
+  background $c-mid-cool
+  border-bottom 2px solid $c-dark-cool
+  clearfix()
+  
+
+  h1, nav
+    inline-block()
+  
+  h1
+    font-size(2.4)
+    a 
+      color $c-dark-cool
+      text-shadow 0 1px rgba(255,255,255,0.3)
+    
+  nav
+    float right
+    a
+      padding gap(0.75) gap(1) gap(0.25)
+      background lighten($c-dark-cool, 10%)
+      display block
+      font-variant small-caps
+      font-size(1.25)
+      //font-family $display-font-family
+      color lighten($c-mid-cool, 35%)
+      border-top 4px solid darken($c-mid-cool, 60%)
+      &:hover
+        background darken($c-dark-cool, 50%)
+        color lighten($c-light, 10%)
+        border-top-color $c-light
+
+
+#content
+  background lighten($c-light, 20%)
+  width 95%
+  min-width $inner-wrapper-min-width
+  min-height 100%
+  margin 0 auto
+  border-left gap(0.25) solid darken($c-light, 20%)
+  border-right gap(0.25) solid darken($c-light, 20%)
+
+#footer
+  background $c-dark-cool
+  color lighten($c-light, 20%)
+  font-size(0.9)
+  text-align center
+  height $footer-height
+  line-height $footer-height
+  a
+    color $c-light
