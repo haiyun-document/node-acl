@@ -25,7 +25,9 @@ app.get "/", (req, res) ->
   
 app.get "/define", (req, res) ->
   res.render "define"
-    
+
+# Mock routes for frontend development
+
     
 app.listen 3000
 console.log "Express server listening on port %d in %s mode", app.address().port, app.settings.env
