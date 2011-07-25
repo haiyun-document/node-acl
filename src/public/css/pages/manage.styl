@@ -1,0 +1,56 @@
+#manage>section
+  width 33%
+  
+#manage-request
+  background lighten($c-mid-warm, 70%)
+  header
+    border-color $c-dark-warm
+    h1, h2
+      color $c-mid-warm
+    
+  .items h1
+    hide-text()
+  
+  section
+    border-color lighten($c-dark-warm, 80%)
+
+#manage-access
+  background lighten($c-mid-cool, 290%)
+  header
+    border-color $c-dark-cool
+    h1, h2
+      color $c-mid-cool
+      
+  section
+    border-color lighten($c-dark-cool, 80%)
+
+#manage-shortlist
+  background lighten($c-light, 8%)
+  .col-inner
+    border-width 0 5px 0
+    border-style solid
+    border-color darken($c-light, 40%)
+  header
+    border-color darken($c-light, 60%)
+    h1, h2
+      color darken($c-light, 30%)
+  
+  section
+    border-color darken($c-light, 50%)
+  
+  $shadow-width = gap(0.2) 
+  $shadow-pos = 5px
+  
+  .shadow
+    position absolute
+    display block
+    width $shadow-width
+    top 0
+    
+  .shadow-left
+    background linear-gradient-image($shadow-width left, rgba(0,0,0,0.3), rgba(0,0,0,0))
+    left $shadow-pos
+  
+  .shadow-right
+    background linear-gradient-image($shadow-width right, rgba(0,0,0,0.3), rgba(0,0,0,0))
+    right $shadow-pos

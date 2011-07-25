@@ -1,0 +1,68 @@
+gap($multiplier)
+  return $base-gap * $multiplier
+
+inline-block($vertical-align=top)
+  display inline-block
+  vertical-align $vertical-align
+  .ie7 &
+    display inline
+    zoom 1
+    
+// Calculate new line-height based on vertical rhythm
+font-size($size-multiplier, $set-line-height=true)
+  $font-size = unit($base-font-size * $size-multiplier, 'px')
+  font-size $font-size
+  if $set-line-height
+    line-height unit($base-line-height / $font-size, 'em')
+  
+// Outputs CSS using 'font' attribute with automatically calculated line-height
+font($size-multiplier, $font-family)
+  font-family $font-family
+  font-size($size-multiplier)
+
+// Image path helper
+path($image-name)
+  return $images +'/'+ $image-name
+
+// Helper to set background image
+image($image-name, $args)
+  background: url(path($image-name)) $args
+  
+// Helper for font replacement
+replace-text($image-name, $display=block)
+  image($image-name, no-repeat center)
+  display $display
+  
+  $size = image-size(path($image-name))
+  width $size[0]
+  height $size[1]
+  
+  text-indent -9999px
+  border none
+
+// Mixin for hiding text from showing
+hide-text()
+  absolute(top -9999px left -9999px)
+
+// Create transparent background
+// trans($alpha=0.5, $bg-color=#000)
+trans($alpha=0.5, $bg-color=#000)
+  linear-gradient-image(1px top, rgba($bg-color, $alpha), rgba($bg-color, $alpha))
+
+// Helper for creating buttons
+button($btncolor=$c-button-main, $font-size=1em, $padding=4px 12px, $display=block)
+  $button-height = gap($font-size) + ($padding[0] * 2)
+  
+  display $display
+  background linear-gradient-image($button-height top, lighten($btncolor, 20%), darken($btncolor, 20%))
+  border-radius(0.5em)
+  border none
+  box-shadow 0 1px 1px rgba(0,0,0,0.3)
+  color: #fff
+  text-shadow 0 1px 1px rgba(0,0,0,0.5)
+  font-size $font-size
+  $line-height 1em
+  padding $padding
+  
+  &:hover 
+    background linear-gradient-image($button-height top, lighten($btncolor, 40%), $btncolor)

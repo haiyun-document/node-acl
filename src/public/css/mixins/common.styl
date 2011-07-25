@@ -1,0 +1,87 @@
+.items
+  text-align center
+
+  h1
+    text-align left
+    text-transform uppercase
+    color #555
+    font-size(1.2)
+    margin-bottom gap(0.5)
+
+  article
+    inline-block(middle)
+    text-align left
+    border-radius(gap(0.25))
+    box-shadow(0 1px 1px rgba(0,0,0,0.25))
+    margin 2px
+    cursor pointer
+    padding gap(0.25)
+
+    h2
+      color #fff
+
+  item-gradient-bg(base-color)
+    background linear-gradient-image(50px top, lighten(base-color, 50%), lighten(base-color, 30%)) lighten(base-color, 20%)
+    &:hover
+      background linear-gradient-image(50px top, lighten(base-color, 90%), lighten(base-color, 70%)) lighten(base-color, 50%)
+
+
+  .item-request
+    width 120px
+    item-gradient-bg($c-dark-warm)
+    img, h2
+      inline-block(middle)
+    img
+      margin-right gap(0.5)
+
+  .item-access-group
+    background none
+    border-width 4px 
+    border-style solid 
+    border-color $c-mid-cool
+    font-size(1.2)
+    text-align center
+    width 150px
+    h2 
+      color $c-mid-cool
+    &:hover
+      border-color lighten($c-mid-cool, 30%)
+      h2 
+        color lighten($c-mid-cool, 80%)
+    
+    &.active
+      border-color darken($c-light, 40%)
+      h2
+        color darken($c-light, 30%)
+        
+        
+  .item-access
+    item-gradient-bg(lighten(desaturate($c-dark-cool, 80%), 50%))
+
+  .item-access, .item-request
+    &.active
+      item-gradient-bg(darken($c-light, 50%))
+    
+    
+.search, .filters
+  inline-block()
+
+.search
+  margin-top gap(0.25)
+  float right
+  input[type="submit"]
+    replace-text('icon_search.png', inline-block)
+    margin-left gap(0.25)
+    cursor pointer
+
+.filters
+  width 50%
+  h2, .add-filter
+    inline-block(middle)
+
+  h2
+    font-size(1.4)
+    margin-right gap(0.5)
+
+.add-filter
+  replace-text('icon_add.png')

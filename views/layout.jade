@@ -1,6 +1,42 @@
-!!!
+!!!5
 html
   head
     title= title
+    link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Lora:400,400italic|Shanti&v2')
     link(rel='stylesheet', href='/css/style.css')
-  body!= body
+  body
+    #container
+      header#header
+        .inner-wrapper
+          h1 
+            a(href="/") node-acl
+          nav
+            ul
+              li.active
+                a(href="/") Manage
+              li
+                a(href="/define") Define
+      #content!= body
+    footer#footer
+      .inner-wrapper
+        p 
+          a(href="https://github.com/cellkast/node-acl") node-acl
+          |, open source NodeJS access control module.
+  
+  
+  
+  
+  
+  script(src="http://cdnjs.cloudflare.com/ajax/libs/yepnope/1.0.1/yepnope.min.js")
+  script
+    yepnope([
+      "https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
+      , "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"
+      , "http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.1.7/underscore-min.js"
+      , "http://cdnjs.cloudflare.com/ajax/libs/backbone.js/0.5.1/backbone-min.js"
+      , "/js/models.js"
+      , "/js/script.js"
+    ]);
+    
+    
+    

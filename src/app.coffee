@@ -17,8 +17,17 @@ app.configure "development", ->
 app.configure "production", ->
   app.use express.errorHandler()
 
-app.get "/", (req, res) ->
-  res.render "index", title: "Express"
+app.helpers
+  title: "node-acl"
 
+app.get "/", (req, res) ->
+  res.render "index"
+  
+app.get "/define", (req, res) ->
+  res.render "define"
+
+# Mock routes for frontend development
+
+    
 app.listen 3000
 console.log "Express server listening on port %d in %s mode", app.address().port, app.settings.env
