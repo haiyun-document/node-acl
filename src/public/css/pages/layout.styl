@@ -39,6 +39,7 @@ html, body
   
   h1
     font-size(2.4)
+    width 200px
   a 
     color $c-dark-cool
     text-shadow 0 1px rgba(255,255,255,0.3)
@@ -71,6 +72,41 @@ html, body
   margin 0 auto
   border-left gap(0.25) solid darken($c-light, 20%)
   border-right gap(0.25) solid darken($c-light, 20%)
+  text-align center
+  
+  &>div>section, &>div>aside
+    inline-block()
+    text-align left
+    position relative
+
+  section header
+    border-width 5px 0 2px
+    border-style solid
+    padding-bottom gap(0.5)
+    margin-bottom gap(0.5)
+    clearfix()
+
+    h1
+      font-size(3)
+      
+  section section header
+    border-width 0 0 1px
+    border-style solid
+    padding-bottom gap(0.5)
+    margin-bottom gap(0.5)
+    clearfix()
+
+    h1
+      font-size(1.8)
+
+  .col-inner    
+    padding gap(0.5)
+
+  section section
+    padding-bottom gap(0.5)
+    margin-bottom gap(0.5)
+    border-width 0 0 1px
+    border-style dotted
 
 #footer
   background $c-dark-cool

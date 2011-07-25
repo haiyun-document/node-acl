@@ -5,8 +5,8 @@ setContentHeight = ->
   
   contentHeight = windowHeight - headerHeight - footerHeight
   
-  $('#content, #manage>section, .shadow').height(contentHeight)
-  $('.col-inner').css({'min-height': contentHeight})
+  $('#content, #content>div>section, .shadow').height(contentHeight)
+  $('#manage .col-inner').css({'min-height': contentHeight})
   
 $ ->
   setContentHeight()

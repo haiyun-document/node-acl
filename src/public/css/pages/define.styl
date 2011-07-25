@@ -1,0 +1,64 @@
+#define
+  &>section
+    width 66%
+  &>aside
+    width 33%
+    
+  header
+    border-color $c-dark-cool
+    h1, h2
+      color $c-mid-cool
+      
+  section section header
+    border-color desaturate($c-dark-cool, 50%)
+    h1, h2
+      color desaturate($c-mid-cool, 50%)
+    h1
+      inline-block()
+      width 300px
+  
+  section
+    border-color lighten($c-dark-cool, 80%)
+    
+  .access-add
+    float right
+    margin-top gap(0.5)
+    padding-right gap(1.2)
+    background url(path('icon_add.png')) right center no-repeat
+    font-size(1.2)
+    
+.access-info
+  hgroup
+    margin-bottom gap(1)
+
+  .col-inner
+    margin-top gap(2)
+    background lighten($c-light, 15%)
+    box-shadow( inset 0px 0px 3px rgba(0,0,0,0.2))
+
+  h1 
+    font-size(1.8)
+    color $c-mid-cool
+  h2
+    font-size(1.4)
+    color $c-dark-cool
+  h3
+    font-size(1.2)
+    color $c-dark-cool
+  h3+p
+    margin-top 0
+  
+  dl
+    clearfix()
+  
+  dt
+    float left
+    width 150px
+    clear left
+    
+  dd
+    overflow hidden
+    &.allow
+      color #0a0
+    &.deny
+      color #c00

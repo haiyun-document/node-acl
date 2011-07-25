@@ -3,11 +3,11 @@
     .col-inner
       header
         h1 Requests
-        .manage-filters
+        .filters
           h2 Filters
-          a.manage-add-filter#manage-add-request-filter(href="#", title="Add Request Filter") Add Filter
+          a.add-filter#manage-add-request-filter(href="#", title="Add Request Filter") Add Filter
           ul#manage-request-filters
-        form.manage-search#search-request
+        form.search#search-request
           input(type="text", name="search-request")
           input(type="submit", value="Search")
       
@@ -54,7 +54,7 @@
     .col-inner
       header
         h1 Shortlist
-        form.manage-search#search-access
+        form.search#search-access
           input(type="text", name="search-access")
           input(type="submit", value="Search")
       
@@ -83,11 +83,11 @@
     .col-inner
       header
         h1 Access
-        .manage-filters
+        .filters
           h2 Filters
-          a.manage-add-filter#manage-add-access-filter(href="#", title="Add Access Filter") Add Filter
+          a.add-filter#manage-add-access-filter(href="#", title="Add Access Filter") Add Filter
           ul#manage-access-filters
-        form.manage-search#search-access
+        form.search#search-access
           input(type="text", name="search-access")
           input(type="submit", value="Search")
       

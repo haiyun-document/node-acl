@@ -6,8 +6,8 @@
     footerHeight = $('#footer').outerHeight();
     windowHeight = $(window).height();
     contentHeight = windowHeight - headerHeight - footerHeight;
-    $('#content, #manage>section, .shadow').height(contentHeight);
-    return $('.col-inner').css({
+    $('#content, #content>div>section, .shadow').height(contentHeight);
+    return $('#manage .col-inner').css({
       'min-height': contentHeight
     });
   };

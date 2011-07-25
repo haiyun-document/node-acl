@@ -1,104 +1,6 @@
-#manage
-  text-align center
-  &>section
-    inline-block()
-    width 33%
-    text-align left
-    position relative
+#manage>section
+  width 33%
   
-  header
-    border-width 5px 0 2px
-    border-style solid
-    padding-bottom gap(0.5)
-    margin-bottom gap(0.5)
-    clearfix()
-  
-    h1
-      font-size(3)
-    
-  .col-inner    
-    padding gap(0.5)
-    
-  section section
-    padding-bottom gap(0.5)
-    margin-bottom gap(0.5)
-    border-width 0 0 1px
-    border-style dotted
-
-.manage-search, .manage-filters
-  inline-block()
-
-.manage-search
-  margin-top gap(0.25)
-  float right
-  input[type="submit"]
-    replace-text('icon_search.png', inline-block)
-    margin-left gap(0.25)
-    cursor pointer
-  
-.manage-filters
-  width 50%
-
-.manage-filters
-  h2, .manage-add-filter
-    inline-block(middle)
-    
-  h2
-    font-size(1.4)
-    margin-right gap(0.5)
-
-.manage-add-filter
-  replace-text('icon_add.png')
-  
-.items
-  text-align center
-  
-  h1
-    text-align left
-    text-transform uppercase
-    color #555
-    font-size(1.2)
-    margin-bottom gap(0.5)
-    
-  article
-    inline-block()
-    text-align left
-    border-radius(gap(0.25))
-    box-shadow(0 1px 1px rgba(0,0,0,0.25))
-    margin 2px
-    cursor pointer
-    padding gap(0.25)
-    
-    h2
-      color #fff
-    
-  item-gradient-bg(base-color)
-    background linear-gradient-image(50px top, lighten(base-color, 50%), lighten(base-color, 30%)) lighten(base-color, 20%)
-    &:hover
-      background linear-gradient-image(50px top, lighten(base-color, 70%), lighten(base-color, 50%)) lighten(base-color, 50%)
-
-    
-  .item-request
-    width 120px
-    item-gradient-bg($c-dark-warm)
-    img, h2
-      inline-block(middle)
-    img
-      margin-right gap(0.5)
-  
-  .item-access-group
-    display block
-    font-size(1.2)
-    text-align center
-    item-gradient-bg(lighten($c-dark-cool, 10%))
-    
-  .item-access
-    item-gradient-bg(desaturate($c-dark-cool, 80%))
-    
-  .active
-    item-gradient-bg(darken($c-light, 50%))
-  
-
 #manage-request
   background lighten($c-mid-warm, 70%)
   header
@@ -136,7 +38,7 @@
   section
     border-color darken($c-light, 50%)
   
-  $shadow-width = gap(0.3) 
+  $shadow-width = gap(0.2) 
   $shadow-pos = 5px
   
   .shadow
