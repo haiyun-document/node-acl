@@ -216,7 +216,7 @@ body {
   font-size: 33.6px;
   line-height: 1.5em;
 }
-#header h1 a {
+#header a {
   color: #003647;
   text-shadow: 0 1px rgba(255,255,255,0.3);
 }
@@ -225,20 +225,22 @@ body {
 }
 #header nav a {
   padding: 15.75px 21px 5.25px;
-  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAIAAAASmSbdAAAABmJLR0QA/wD/AP+gvaeTAAAAI0lEQVQImWNgcIpgYmBgYGJg+M/E8J8Bjf2fsNx/KqmhTD8AKA8k2a3aS8sAAAAASUVORK5CYII=");
   display: block;
   font-variant: small-caps;
-  font-size: 17.5px;
+  font-size: 19.599999999999998px;
   line-height: 1.5em;
   font-family: "Shanti", sans-serif;
-  color: #0099a9;
-  border-top: 4px solid #002d32;
 }
-#header nav li a:hover,
+#header nav a:hover {
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAIAAAASmSbdAAAABmJLR0QA/wD/AP+gvaeTAAAAKElEQVQImWNg6JnNxMDAwMTw/z+EZvjPxPAfB42sDheNTz8x5pCnHwAMmy5dsUkptgAAAABJRU5ErkJggg==");
+}
 #header nav .active a {
-  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAIAAAASmSbdAAAABmJLR0QA/wD/AP+gvaeTAAAAKElEQVQImWNgUNZjYmBgwIEZEWxGPHLImBGPHLJeDPNwmMtIhJ0MDABpVgC+AXSzAwAAAABJRU5ErkJggg==");
-  color: #fddb9c;
-  border-top-color: #ffe67a;
+  background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAyCAIAAAASmSbdAAAABmJLR0QA/wD/AP+gvaeTAAAAHklEQVQImWNgsHNlYmBkRMJMaHx0TEieCDVMVLcDALQMAU+15XvYAAAAAElFTkSuQmCC");
+  border-width: 0 1px 0;
+  border-style: solid;
+  border-color: #007783;
+  color: #fff;
+  text-shadow: 0 1px rgba(0,0,0,0.25);
 }
 #content {
   background: #fdf8ee;
