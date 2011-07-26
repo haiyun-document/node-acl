@@ -103,7 +103,13 @@
     AccessItemView.prototype.tagName = 'article';
     AccessItemView.prototype.className = 'item-access';
     AccessItemView.prototype.render = function() {
-      return $(this.el).html(this.tmpl(this.model.toJSON()));
+      $(this.el).html(this.tmpl(this.model.toJSON()));
+      return $(this.el).draggable({
+        revert: 'invalid',
+        containment: '#content',
+        cursor: 'crosshair',
+        zIndex: 3000
+      });
     };
     return AccessItemView;
   })();
@@ -116,7 +122,13 @@
     AccessGroupItemView.prototype.tagName = 'article';
     AccessGroupItemView.prototype.className = 'item-access-group';
     AccessGroupItemView.prototype.render = function() {
-      return $(this.el).html(this.tmpl(this.model.toJSON()));
+      $(this.el).html(this.tmpl(this.model.toJSON()));
+      return $(this.el).draggable({
+        revert: 'invalid',
+        containment: '#content',
+        cursor: 'crosshair',
+        zIndex: 3000
+      });
     };
     return AccessGroupItemView;
   })();
@@ -143,16 +155,48 @@
           return appendItems(self.el, accessGroups, $manageAccessGroup, callback);
         }
       ], function(err) {
-        $(self.el).find('#manage-selected-request').droppable({
+        $(self.el).find('#manage-selected-request, #manage-items-request').droppable({
           accept: '.item-request',
           activeClass: 'active',
           drop: function(e, ui) {
             $(e.target).append(ui.draggable);
-            $(ui.draggable).css({
+            return $(ui.draggable).css({
               left: 'auto',
               top: 'auto'
             });
-            return console.log(ui);
+          }
+        });
+        $(self.el).find('#manage-selected-access').droppable({
+          accept: '.item-access-group, .item-access',
+          activeClass: 'active',
+          drop: function(e, ui) {
+            $(e.target).append(ui.draggable);
+            return $(ui.draggable).css({
+              left: 'auto',
+              top: 'auto'
+            });
+          }
+        });
+        $(self.el).find('#manage-items-access-group').droppable({
+          accept: '.item-access-group',
+          activeClass: 'active',
+          drop: function(e, ui) {
+            $(e.target).append(ui.draggable);
+            return $(ui.draggable).css({
+              left: 'auto',
+              top: 'auto'
+            });
+          }
+        });
+        $(self.el).find('#manage-items-access').droppable({
+          accept: '.item-access',
+          activeClass: 'active',
+          drop: function(e, ui) {
+            $(e.target).append(ui.draggable);
+            return $(ui.draggable).css({
+              left: 'auto',
+              top: 'auto'
+            });
           }
         });
         return changePage(self.el);

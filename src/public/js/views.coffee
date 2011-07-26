@@ -93,6 +93,12 @@ class AccessItemView extends Backbone.View
   className: 'item-access'
   render: ->
     $(@el).html(@tmpl(@model.toJSON()))
+    
+    $(@el).draggable
+      revert: 'invalid'
+      containment: '#content'
+      cursor: 'crosshair'
+      zIndex: 3000
   
 class AccessGroupItemView extends Backbone.View
   tmpl: nacl.templates.accessGroupItem
@@ -100,6 +106,12 @@ class AccessGroupItemView extends Backbone.View
   className: 'item-access-group'
   render: ->
     $(@el).html(@tmpl(@model.toJSON()))
+    
+    $(@el).draggable
+      revert: 'invalid'
+      containment: '#content'
+      cursor: 'crosshair'
+      zIndex: 3000
 
 # Pages views
 class ManageView extends Backbone.View
@@ -117,14 +129,34 @@ class ManageView extends Backbone.View
       (callback) -> appendItems(self.el, accessGroups, $manageAccessGroup, callback)
     ]
     , (err) ->
-      $(self.el).find('#manage-selected-request').droppable
+      $(self.el).find('#manage-selected-request, #manage-items-request').droppable
         accept: '.item-request'
         activeClass: 'active'
         drop: (e, ui) ->
           $(e.target).append(ui.draggable)
           $(ui.draggable).css({left: 'auto', top: 'auto'})
-          console.log ui
-          
+      
+      $(self.el).find('#manage-selected-access').droppable
+        accept: '.item-access-group, .item-access'
+        activeClass: 'active'
+        drop: (e, ui) ->
+          $(e.target).append(ui.draggable)
+          $(ui.draggable).css({left: 'auto', top: 'auto'})
+      
+      $(self.el).find('#manage-items-access-group').droppable
+        accept: '.item-access-group'
+        activeClass: 'active'
+        drop: (e, ui) ->
+          $(e.target).append(ui.draggable)
+          $(ui.draggable).css({left: 'auto', top: 'auto'})
+      
+      $(self.el).find('#manage-items-access').droppable
+        accept: '.item-access'
+        activeClass: 'active'
+        drop: (e, ui) ->
+          $(e.target).append(ui.draggable)
+          $(ui.draggable).css({left: 'auto', top: 'auto'})
+      
       changePage(self.el)
     
 class DefineView extends Backbone.View

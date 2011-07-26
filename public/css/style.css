@@ -168,6 +168,10 @@ nav li {
 }
 .items {
   text-align: center;
+  min-height: 200px;
+}
+.items.active {
+  border: 3px solid #ec0 !important;
 }
 .items h1 {
   text-align: left;
