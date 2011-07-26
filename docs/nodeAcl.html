@@ -1,0 +1,139 @@
+<!DOCTYPE html>  <html> <head>   <title>nodeAcl.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="accessGroupModule.html">                 accessGroupModule.coffee               </a>                                           <a class="source" href="accessModule.html">                 accessModule.coffee               </a>                                           <a class="source" href="conf.html">                 conf.coffee               </a>                                           <a class="source" href="error.html">                 error.coffee               </a>                                           <a class="source" href="mockData.html">                 mockData.coffee               </a>                                           <a class="source" href="models.html">                 models.coffee               </a>                                           <a class="source" href="nodeAcl.html">                 nodeAcl.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               nodeAcl.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <p>Module requires</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">_ = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;underscore&#39;</span><span class="p">)</span>
+<span class="p">{</span><span class="nx">AccessModule</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./accessModule&#39;</span><span class="p">)</span>
+<span class="p">{</span><span class="nx">AccessGroupModule</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./accessGroupModule&#39;</span><span class="p">)</span>
+<span class="p">{</span><span class="nx">Access</span><span class="p">,</span><span class="nx">AccessGroup</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./models&#39;</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>relationship = require('relationshipModule')
+conflictManager = require('conflictManagerModule')</p>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Main function object</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">nodeAcl = </span>
+  </pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h2>Access</h2>             </td>             <td class="code">               <div class="highlight"><pre>  </pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p><code>createAccess</code>: Creates a new access object</p>
+
+<pre><code>data:
+  slug: String, machine readable slug name
+  name: String, human readable name
+  desc: String, description
+  enabled: Boolean
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">createAccess: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessModule = </span><span class="k">new</span> <span class="nx">AccessModule</span><span class="p">()</span>
+    <span class="nx">accessModule</span><span class="p">.</span><span class="nx">create</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, accessId) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">accessId</span><span class="p">)</span>
+    <span class="k">return</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p><code>readAccess</code>: Returns a single or all access items</p>
+
+<pre><code>data: 
+  slug: (optional) String
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">readAccess: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessModule = </span><span class="k">new</span> <span class="nx">AccessModule</span><span class="p">()</span>
+    <span class="nx">accessModule</span><span class="p">.</span><span class="nx">read</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+    <span class="k">return</span>
+    </pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p><code>updateAccess</code>: Updates access object</p>
+
+<pre><code>data: 
+  slug: (Required) String, machine readable slug name
+  name: String, human readable name
+  desc: String, description
+  enabled: Boolean
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">updateAccess: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessModule = </span><span class="k">new</span> <span class="nx">AccessModule</span><span class="p">()</span>
+    <span class="nx">accessModule</span><span class="p">.</span><span class="nx">update</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+    <span class="k">return</span> 
+    </pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <p><code>deleteAccess</code>: Deletes access object</p>
+
+<pre><code>data: 
+  slug: (Required) String, machine readable slug name
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">deleteAccess: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessModule = </span><span class="k">new</span> <span class="nx">AccessModule</span><span class="p">()</span>
+    <span class="nx">accessModule</span><span class="p">.</span><span class="k">delete</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+    <span class="k">return</span> 
+  </pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h2>Access Group</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <p><code>createAccessGroup</code>: Creates a new access group object</p>
+
+<pre><code>data: 
+  slug: (Required) String, machine readable slug name
+  name: (Required) String, human readable name
+  desc: String, description
+  access: [
+    _id: ObjectId, id for access to include
+    slug: String, slug for access to include
+    perm: String, 'allow/deny'
+  ]
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">createAccessGroup: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessGroupModule = </span><span class="k">new</span> <span class="nx">AccessGroupModule</span><span class="p">()</span>
+    <span class="nx">accessGroupModule</span><span class="p">.</span><span class="nx">create</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, accessGroupId) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">accessGroupId</span><span class="p">)</span>
+    <span class="k">return</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <p><code>readAccessGroup</code>: Returns a single or all access items</p>
+
+<pre><code>data: 
+  slug: (optional) String
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">readAccessGroup: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessGroupModule = </span><span class="k">new</span> <span class="nx">AccessGroupModule</span><span class="p">()</span>
+    <span class="nx">accessGroupModule</span><span class="p">.</span><span class="nx">read</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="nx">result</span><span class="p">)</span>
+    <span class="k">return</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p><code>updateAccessGroup</code>: Updates access group object</p>
+
+<pre><code>data: 
+  slug: (Required) String, machine readable slug name
+  name: (Required) String, human readable name
+  desc: String, description
+  access: [
+    _id: ObjectId, id for access to include
+    slug: String, slug for access to include
+    perm: String, 'allow/deny'
+  ]
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">updateAccessGroup: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessGroupModule = </span><span class="k">new</span> <span class="nx">AccessGroupModule</span><span class="p">()</span>
+    <span class="nx">accessGroupModule</span><span class="p">.</span><span class="nx">update</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+    <span class="k">return</span> </pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p><code>deleteAccessGroup</code>: Deletes access group object</p>
+
+<pre><code>data: 
+  slug: (Required) String, machine readable slug name
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">deleteAccessGroup: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nv">accessGroupModule = </span><span class="k">new</span> <span class="nx">AccessGroupModule</span><span class="p">()</span>
+    <span class="nx">accessGroupModule</span><span class="p">.</span><span class="k">delete</span> <span class="nx">data</span><span class="p">,</span> <span class="nf">(err, result) -&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">)</span>
+    <span class="k">return</span> </pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h2>Grant/Revoke</h2>             </td>             <td class="code">               <div class="highlight"><pre>  
+  <span class="nv">grantAccess: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Function not ready&#39;</span><span class="p">)</span>
+    <span class="k">return</span>
+
+  <span class="nv">revokeAccess: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Function not ready&#39;</span><span class="p">)</span>
+    <span class="k">return</span>
+
+  <span class="nv">grantAccessGroup: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Function not ready&#39;</span><span class="p">)</span>
+    <span class="k">return</span> 
+
+  <span class="nv">revokeAccessGroup: </span><span class="nf">(data, callback) -&gt;</span>
+    <span class="nx">callback</span><span class="p">(</span><span class="s1">&#39;Function not ready&#39;</span><span class="p">)</span>
+    <span class="k">return</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>Module exports</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">module.exports = </span><span class="nx">nodeAcl</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

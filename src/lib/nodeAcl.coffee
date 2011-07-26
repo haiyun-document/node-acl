@@ -1,25 +1,24 @@
+# Module requires
 _ = require('underscore')
 {AccessModule} = require('./accessModule')
 {AccessGroupModule} = require('./accessGroupModule')
 {Access,AccessGroup} = require('./models')
 
-###
-relationship = require('relationshipModule')
-conflictManager = require('conflictManagerModule')
-###
+# relationship = require('relationshipModule')
+# conflictManager = require('conflictManagerModule')
 
+# Main function object
 nodeAcl = 
   
   # ## Access
   
   # `createAccess`: Creates a new access object
-  # data: 
   #
-  #     slug: String, machine readable slug name
-  #     name: String, human readable name
-  #     desc: String, description
-  #     enabled: Boolean
-  #
+  #     data:
+  #       slug: String, machine readable slug name
+  #       name: String, human readable name
+  #       desc: String, description
+  #       enabled: Boolean
   
   createAccess: (data, callback) ->
     accessModule = new AccessModule()
@@ -32,10 +31,8 @@ nodeAcl =
 
   # `readAccess`: Returns a single or all access items
   #
-  # data: 
-  #
-  #     slug: (optional) String
-  #
+  #     data: 
+  #       slug: (optional) String
   
   readAccess: (data, callback) ->
     accessModule = new AccessModule()
@@ -47,13 +44,12 @@ nodeAcl =
     return
     
   # `updateAccess`: Updates access object
-  # data: 
   #
-  #     slug: (Required) String, machine readable slug name
-  #     name: String, human readable name
-  #     desc: String, description
-  #     enabled: Boolean
-  #
+  #     data: 
+  #       slug: (Required) String, machine readable slug name
+  #       name: String, human readable name
+  #       desc: String, description
+  #       enabled: Boolean
   
   updateAccess: (data, callback) ->
     accessModule = new AccessModule()
@@ -66,10 +62,8 @@ nodeAcl =
     
   # `deleteAccess`: Deletes access object
   #
-  # data: 
-  #
-  #     slug: (Required) String, machine readable slug name
-  #
+  #     data: 
+  #       slug: (Required) String, machine readable slug name
   
   deleteAccess: (data, callback) ->
     accessModule = new AccessModule()
@@ -80,9 +74,20 @@ nodeAcl =
         callback(null)
     return 
   
-  ###
-    AccessGroup
-  ###  
+  # ## Access Group
+
+  # `createAccessGroup`: Creates a new access group object
+  #
+  #     data: 
+  #       slug: (Required) String, machine readable slug name
+  #       name: (Required) String, human readable name
+  #       desc: String, description
+  #       access: [
+  #         _id: ObjectId, id for access to include
+  #         slug: String, slug for access to include
+  #         perm: String, 'allow/deny'
+  #       ]
+  
   createAccessGroup: (data, callback) ->
     accessGroupModule = new AccessGroupModule()
     accessGroupModule.create data, (err, accessGroupId) ->
@@ -91,6 +96,11 @@ nodeAcl =
       else
         callback(null,accessGroupId)
     return
+
+  # `readAccessGroup`: Returns a single or all access items
+  #
+  #     data: 
+  #       slug: (optional) String
 
   readAccessGroup: (data, callback) ->
     accessGroupModule = new AccessGroupModule()
@@ -101,6 +111,18 @@ nodeAcl =
         callback(null,result)
     return
 
+  # `updateAccessGroup`: Updates access group object
+  #
+  #     data: 
+  #       slug: (Required) String, machine readable slug name
+  #       name: (Required) String, human readable name
+  #       desc: String, description
+  #       access: [
+  #         _id: ObjectId, id for access to include
+  #         slug: String, slug for access to include
+  #         perm: String, 'allow/deny'
+  #       ]
+
   updateAccessGroup: (data, callback) ->
     accessGroupModule = new AccessGroupModule()
     accessGroupModule.update data, (err, result) ->
@@ -109,6 +131,11 @@ nodeAcl =
       else
         callback(null)
     return 
+
+  # `deleteAccessGroup`: Deletes access group object
+  #
+  #     data: 
+  #       slug: (Required) String, machine readable slug name
 
   deleteAccessGroup: (data, callback) ->
     accessGroupModule = new AccessGroupModule()
@@ -119,9 +146,8 @@ nodeAcl =
         callback(null)
     return 
 
-  ###
-    Grant/Revoke
-  ###
+  # ## Grant/Revoke
+  
   grantAccess: (data, callback) ->
     callback('Function not ready')
     return
@@ -138,5 +164,5 @@ nodeAcl =
     callback('Function not ready')
     return
 
-
+# Module exports
 module.exports = nodeAcl

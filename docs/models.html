@@ -1,0 +1,42 @@
+<!DOCTYPE html>  <html> <head>   <title>models.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="accessGroupModule.html">                 accessGroupModule.coffee               </a>                                           <a class="source" href="accessModule.html">                 accessModule.coffee               </a>                                           <a class="source" href="conf.html">                 conf.coffee               </a>                                           <a class="source" href="error.html">                 error.coffee               </a>                                           <a class="source" href="mockData.html">                 mockData.coffee               </a>                                           <a class="source" href="models.html">                 models.coffee               </a>                                           <a class="source" href="nodeAcl.html">                 nodeAcl.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               models.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nv">mongoose = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;mongoose&#39;</span><span class="p">)</span>
+<span class="nv">app = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../app&#39;</span><span class="p">)</span>
+<span class="nv">conf = </span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./conf&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="nx">module</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">id</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;test.js&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span> <span class="o">-&gt;</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">use</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">testDb</span><span class="p">)</span>
+<span class="k">else</span>
+  <span class="nx">app</span><span class="p">.</span><span class="nx">configure</span> <span class="o">-&gt;</span>
+    <span class="nx">app</span><span class="p">.</span><span class="nx">use</span> <span class="nx">mongoose</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">db</span><span class="p">)</span>
+
+<span class="nv">Schema = </span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">Schema</span>
+<span class="nv">ObjectId = </span><span class="nx">Schema</span><span class="p">.</span><span class="nx">ObjectId</span>
+
+<span class="nv">AccessSchema = </span><span class="k">new</span> <span class="nx">Schema</span>
+  <span class="nv">slug: </span><span class="nb">String</span>
+  <span class="nv">name: </span><span class="nb">String</span>
+  <span class="nv">desc: </span><span class="nb">String</span>
+  <span class="nv">enable: </span><span class="nb">Boolean</span>
+  <span class="nv">createdAt: </span><span class="p">{</span><span class="nv">type: </span><span class="nb">Date</span><span class="p">,</span> <span class="nv">default: </span><span class="k">new</span> <span class="nb">Date</span><span class="p">()}</span>
+
+<span class="nv">EmbedAccess = </span><span class="k">new</span> <span class="nx">Schema</span>
+  <span class="nv">_id: </span><span class="nx">ObjectId</span>
+  <span class="nv">slug: </span><span class="nb">String</span>
+  <span class="nv">perm: </span><span class="nb">String</span>
+
+<span class="nv">AccessGroupSchema = </span><span class="k">new</span> <span class="nx">Schema</span>
+  <span class="nv">slug: </span><span class="nb">String</span>
+  <span class="nv">name: </span><span class="nb">String</span>
+  <span class="nv">desc: </span><span class="nb">String</span>
+  <span class="nv">access: </span><span class="p">[</span><span class="nx">EmbedAccess</span><span class="p">]</span>
+  <span class="nv">createdAt: </span><span class="p">{</span><span class="nv">type: </span><span class="nb">Date</span><span class="p">,</span> <span class="nv">default: </span><span class="k">new</span> <span class="nb">Date</span><span class="p">()}</span>
+
+
+<span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;Access&#39;</span><span class="p">,</span> <span class="nx">AccessSchema</span>
+<span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;AccessGroup&#39;</span><span class="p">,</span> <span class="nx">AccessGroupSchema</span>
+
+
+<span class="nv">module.exports.Access = </span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;Access&#39;</span>
+<span class="nv">module.exports.AccessGroup = </span><span class="nx">mongoose</span><span class="p">.</span><span class="nx">model</span> <span class="s1">&#39;AccessGroup&#39;</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
