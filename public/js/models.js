@@ -14,9 +14,12 @@
     function Request() {
       Request.__super__.constructor.apply(this, arguments);
     }
+    Request.prototype.idAttribute = '_id';
     Request.prototype.initialize = function() {
-      return this.view = new nacl.views.RequestItemView({
-        model: this
+      return this.view = new nacl.views.ItemView({
+        model: this,
+        tmpl: nacl.templates.requestItem,
+        className: 'item-request'
       });
     };
     return Request;
@@ -26,9 +29,12 @@
     function Access() {
       Access.__super__.constructor.apply(this, arguments);
     }
+    Access.prototype.idAttribute = '_id';
     Access.prototype.initialize = function() {
-      return this.view = new nacl.views.AccessItemView({
-        model: this
+      return this.view = new nacl.views.ItemView({
+        model: this,
+        tmpl: nacl.templates.accessItem,
+        className: 'item-access'
       });
     };
     return Access;
@@ -38,9 +44,12 @@
     function AccessGroup() {
       AccessGroup.__super__.constructor.apply(this, arguments);
     }
+    AccessGroup.prototype.idAttribute = '_id';
     AccessGroup.prototype.initialize = function() {
-      return this.view = new nacl.views.AccessGroupItemView({
-        model: this
+      return this.view = new nacl.views.ItemView({
+        model: this,
+        tmpl: nacl.templates.accessGroupItem,
+        className: 'item-access-group'
       });
     };
     return AccessGroup;
@@ -53,6 +62,10 @@
     Requests.prototype.url = '/request';
     Requests.prototype.model = Request;
     Requests.prototype.initialize = function() {
+      this.view = new nacl.views.CollectionView({
+        collection: this,
+        className: 'items items-request'
+      });
       return this.fetch();
     };
     return Requests;
@@ -65,6 +78,10 @@
     Accesses.prototype.url = '/access';
     Accesses.prototype.model = Access;
     Accesses.prototype.initialize = function() {
+      this.view = new nacl.views.CollectionView({
+        collection: this,
+        className: 'items items-access'
+      });
       return this.fetch();
     };
     return Accesses;
@@ -77,6 +94,10 @@
     AccessGroups.prototype.url = '/access-group';
     AccessGroups.prototype.model = AccessGroup;
     AccessGroups.prototype.initialize = function() {
+      this.view = new nacl.views.CollectionView({
+        collection: this,
+        className: 'items items-access-group'
+      });
       return this.fetch();
     };
     return AccessGroups;

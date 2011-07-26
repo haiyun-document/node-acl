@@ -38,7 +38,11 @@
   });
   app.get("/access", function(req, res) {
     return nodeAcl.readAccess({}, function(err, result) {
-      return res.send(result);
+      if (err != null) {
+        return res.send(err);
+      } else {
+        return res.send(result);
+      }
     });
   });
   app.get("/access/:slug", function(req, res) {
@@ -47,14 +51,26 @@
       slug: req.params.slug
     };
     return nodeAcl.readAccess(data, function(err, result) {
-      return res.send(result);
+      console.log(err, result);
+      if (err != null) {
+        return res.send(err);
+      } else {
+        return res.send(result);
+      }
     });
   });
   app.post("/access", function(req, res) {
     var data;
     data = req.body;
     return nodeAcl.createAccess(data, function(err, result) {
-      return res.send(result);
+      console.log(err, result);
+      if (err != null) {
+        return res.send(err);
+      } else {
+        return res.send({
+          _id: result
+        });
+      }
     });
   });
   app.put("/access/:slug", function(req, res) {
@@ -62,6 +78,7 @@
     data = req.body;
     data.slug = req.params.slug;
     return nodeAcl.updateAccess(data, function(err, result) {
+      console.log(err, result);
       return res.send(result);
     });
   });
@@ -70,11 +87,61 @@
     data = req.body;
     data.slug = req.params.slug;
     return nodeAcl.deleteAccess(data, function(err, result) {
+      console.log(err, result);
       return res.send(result);
     });
   });
   app.get("/access-group", function(req, res) {
-    return res.send(mockData.getAccessGroups);
+    return nodeAcl.readAccessGroup({}, function(err, result) {
+      if (err != null) {
+        return res.send(err);
+      } else {
+        return res.send(result);
+      }
+    });
+  });
+  app.get("/access-group/:slug", function(req, res) {
+    var data;
+    data = {
+      slug: req.params.slug
+    };
+    return nodeAcl.readAccessGroup(data, function(err, result) {
+      if (err != null) {
+        return res.send(err);
+      } else {
+        return res.send(result);
+      }
+    });
+  });
+  app.post("/access-group", function(req, res) {
+    var data;
+    data = req.body;
+    return nodeAcl.createAccessGroup(data, function(err, result) {
+      if (err != null) {
+        return res.send(err);
+      } else {
+        return res.send({
+          _id: result
+        });
+      }
+    });
+  });
+  app.put("/access-group/:slug", function(req, res) {
+    var data;
+    data = req.body;
+    data.slug = req.params.slug;
+    return nodeAcl.updateAccessGroup(data, function(err, result) {
+      return res.send(result);
+    });
+  });
+  app.del("/access-group/:slug", function(req, res) {
+    var data;
+    data = req.body;
+    data.slug = req.params.slug;
+    return nodeAcl.deleteAccessGroup(data, function(err, result) {
+      console.log(err, result);
+      return res.send(result);
+    });
   });
   app.listen(3000);
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

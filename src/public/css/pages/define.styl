@@ -9,6 +9,10 @@
     h1, h2
       color $c-mid-cool
       
+    h1 
+      inline-block()
+      width 600px
+      
   section section header
     border-color desaturate($c-dark-cool, 50%)
     h1, h2
@@ -26,15 +30,25 @@
     padding-right gap(1.2)
     background url(path('icon_add.png')) right center no-repeat
     font-size(1.2)
-    
+
+#define-delete
+  inline-block()
+  width 48px
+  height 48px
+  padding gap(1)
+  border 5px solid #ccc
+  &.active
+    border-color #fc0
+
+#define-info-pane
+  .col-inner
+    background lighten($c-light, 15%)
+    box-shadow( inset 0px 0px 3px rgba(0,0,0,0.2))
+    padding gap(1)
+
 .access-info
   hgroup
     margin-bottom gap(1)
-
-  .col-inner
-    margin-top gap(2)
-    background lighten($c-light, 15%)
-    box-shadow( inset 0px 0px 3px rgba(0,0,0,0.2))
 
   h1 
     font-size(1.8)
@@ -62,3 +76,30 @@
       color #0a0
     &.deny
       color #c00
+      
+.define-form
+  h1 
+    font-size(1.8)
+    color $c-mid-cool
+  label
+    font-size(1.2)
+    display block
+    cursor pointer
+    small
+      font-size(0.9)
+      
+    &[for="form-enable"]
+      display inline
+      
+  input[type="text"], textarea
+    font-size(1.2)
+    width 100%
+  input[type="submit"]
+    font-size(1.2)
+    width 80%
+    margin 0 auto
+    display block
+  
+  input[type="checkbox"]
+    width gap(1)
+    height gap(1)

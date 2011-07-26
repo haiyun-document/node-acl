@@ -43,10 +43,12 @@ app.get "/define", (req, res) ->
 app.get "/request", (req, res) ->
   res.send mockData.getRequests
 
+# ## Access Routes
+
 # Get all access  
 app.get "/access", (req, res) ->
   nodeAcl.readAccess {}, (err, result) ->
-    res.send result
+    if err? then res.send err else res.send result
  
 # Get single access
 app.get "/access/:slug", (req, res) ->
@@ -54,14 +56,17 @@ app.get "/access/:slug", (req, res) ->
     slug: req.params.slug
 
   nodeAcl.readAccess data, (err, result) ->
-    res.send result
+    console.log err, result
+    if err? then res.send err else res.send result
   
 # Create new access
 app.post "/access", (req, res) ->
   data = req.body
-  
   nodeAcl.createAccess data, (err, result) ->
-    res.send result
+    console.log err, result
+    if err? then res.send err
+    else
+      res.send _id: result
   
 # Update access
 app.put "/access/:slug", (req, res) ->
@@ -69,6 +74,7 @@ app.put "/access/:slug", (req, res) ->
   data.slug = req.params.slug
 
   nodeAcl.updateAccess data, (err, result) ->
+    console.log err, result
     res.send result
 
 # Delete access
@@ -76,12 +82,50 @@ app.del "/access/:slug", (req, res) ->
   data = req.body
   data.slug = req.params.slug
   nodeAcl.deleteAccess data, (err, result) ->
+    console.log err, result
     res.send result
-  
+    
+    
 
-# Access group
+    
+# ## Access Group Routes
+
+# Get all access groups
 app.get "/access-group", (req, res) ->
-  res.send mockData.getAccessGroups
+  nodeAcl.readAccessGroup {}, (err, result) ->
+    if err? then res.send err else res.send result
+
+# Get single access group
+app.get "/access-group/:slug", (req, res) ->
+  data = 
+    slug: req.params.slug
+
+  nodeAcl.readAccessGroup data, (err, result) ->
+    if err? then res.send err else res.send result
+
+# Create new access group
+app.post "/access-group", (req, res) ->
+  data = req.body
+  nodeAcl.createAccessGroup data, (err, result) ->
+    if err? then res.send err
+    else
+      res.send _id: result
+
+# Update access group
+app.put "/access-group/:slug", (req, res) ->
+  data = req.body
+  data.slug = req.params.slug
+
+  nodeAcl.updateAccessGroup data, (err, result) ->
+    res.send result
+
+# Delete access group
+app.del "/access-group/:slug", (req, res) ->
+  data = req.body
+  data.slug = req.params.slug
+  nodeAcl.deleteAccessGroup data, (err, result) ->
+    console.log err, result
+    res.send result
     
     
 app.listen 3000

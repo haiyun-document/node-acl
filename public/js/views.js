@@ -1,5 +1,5 @@
 (function() {
-  var $content, $defineAccess, $defineAccessGroup, $manageAccess, $manageAccessGroup, $manageRequest, $manageShortlistAccess, $manageShortlistRequest, AccessGroupItemView, AccessItemView, DefineView, FormView, ManageView, RequestItemView, appendItems, changePage, mapLinks, setContentHeight, smallTemplates, startLoad, stopLoad;
+  var $content, CollectionView, DefineView, FormView, ItemView, ManageView, appendItems, changePage, defineAccess, defineAccessGroup, manageAccess, manageAccessGroup, manageRequest, manageShortlistAccess, manageShortlistRequest, mapLinks, setContentHeight, smallTemplates, startLoad, stopLoad;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -23,13 +23,13 @@
   };
   _.extend(window.nacl.templates, smallTemplates);
   $content = $('#content');
-  $manageRequest = '#manage-items-request';
-  $manageAccess = '#manage-items-access';
-  $manageAccessGroup = '#manage-items-access-group';
-  $manageShortlistRequest = '#manage-shortlist-request';
-  $manageShortlistAccess = '#manage-shortlist-access';
-  $defineAccess = '#define-items-access';
-  $defineAccessGroup = '#define-items-access-group';
+  manageRequest = '#manage-items-request';
+  manageAccess = '#manage-items-access';
+  manageAccessGroup = '#manage-items-access-group';
+  manageShortlistRequest = '#manage-shortlist-request';
+  manageShortlistAccess = '#manage-shortlist-access';
+  defineAccess = '#define-items-access';
+  defineAccessGroup = '#define-items-access-group';
   setContentHeight = function() {
     var contentHeight, footerHeight, headerHeight, windowHeight;
     headerHeight = $('#header').outerHeight();
@@ -93,19 +93,15 @@
     });
     return o;
   };
-  RequestItemView = (function() {
-    __extends(RequestItemView, Backbone.View);
-    function RequestItemView() {
-      RequestItemView.__super__.constructor.apply(this, arguments);
+  ItemView = (function() {
+    __extends(ItemView, Backbone.View);
+    function ItemView() {
+      ItemView.__super__.constructor.apply(this, arguments);
     }
-    RequestItemView.prototype.tmpl = nacl.templates.requestItem;
-    RequestItemView.prototype.tagName = 'article';
-    RequestItemView.prototype.className = 'item-request';
-    RequestItemView.prototype.events = {
-      'click': 'click'
-    };
-    RequestItemView.prototype.render = function() {
-      $(this.el).html(this.tmpl(this.model.toJSON()));
+    ItemView.prototype.tagName = 'article';
+    ItemView.prototype.render = function() {
+      $(this.el).data('slug', this.model.get('slug'));
+      $(this.el).html(this.options.tmpl(this.model.toJSON()));
       return $(this.el).draggable({
         revert: 'invalid',
         containment: '#content',
@@ -113,48 +109,26 @@
         zIndex: 3000
       });
     };
-    RequestItemView.prototype.click = function(e) {
-      return console.log(e.target);
-    };
-    return RequestItemView;
+    return ItemView;
   })();
-  AccessItemView = (function() {
-    __extends(AccessItemView, Backbone.View);
-    function AccessItemView() {
-      AccessItemView.__super__.constructor.apply(this, arguments);
+  CollectionView = (function() {
+    __extends(CollectionView, Backbone.View);
+    function CollectionView() {
+      CollectionView.__super__.constructor.apply(this, arguments);
     }
-    AccessItemView.prototype.tmpl = nacl.templates.accessItem;
-    AccessItemView.prototype.tagName = 'article';
-    AccessItemView.prototype.className = 'item-access';
-    AccessItemView.prototype.render = function() {
-      $(this.el).html(this.tmpl(this.model.toJSON()));
-      return $(this.el).draggable({
-        revert: 'invalid',
-        containment: '#content',
-        cursor: 'crosshair',
-        zIndex: 3000
+    CollectionView.prototype.render = function() {
+      var self;
+      self = this;
+      return _.each(this.collection.models, function(model) {
+        if ($(this.el).find(model.view.el).length < 1) {
+          if ($(model.view.el).html() === '') {
+            model.view.render();
+          }
+          return $(self.el).append(model.view.el);
+        }
       });
     };
-    return AccessItemView;
-  })();
-  AccessGroupItemView = (function() {
-    __extends(AccessGroupItemView, Backbone.View);
-    function AccessGroupItemView() {
-      AccessGroupItemView.__super__.constructor.apply(this, arguments);
-    }
-    AccessGroupItemView.prototype.tmpl = nacl.templates.accessGroupItem;
-    AccessGroupItemView.prototype.tagName = 'article';
-    AccessGroupItemView.prototype.className = 'item-access-group';
-    AccessGroupItemView.prototype.render = function() {
-      $(this.el).html(this.tmpl(this.model.toJSON()));
-      return $(this.el).draggable({
-        revert: 'invalid',
-        containment: '#content',
-        cursor: 'crosshair',
-        zIndex: 3000
-      });
-    };
-    return AccessGroupItemView;
+    return CollectionView;
   })();
   ManageView = (function() {
     __extends(ManageView, Backbone.View);
@@ -172,14 +146,20 @@
       self = this;
       return _.parallel([
         function(callback) {
-          return appendItems(self.el, requests, $manageRequest, callback);
+          requests.view.render();
+          $(self.el).find(manageRequest).append(requests.view.el);
+          return callback();
         }, function(callback) {
-          return appendItems(self.el, accesses, $manageAccess, callback);
+          accesses.view.render();
+          $(self.el).find(manageAccess).append(accesses.view.el);
+          return callback();
         }, function(callback) {
-          return appendItems(self.el, accessGroups, $manageAccessGroup, callback);
+          accessGroups.view.render();
+          $(self.el).find(manageAccessGroup).append(accessGroups.view.el);
+          return callback();
         }
       ], function(err) {
-        $(self.el).find('#manage-selected-request, #manage-items-request').droppable({
+        $(self.el).find('#manage-selected-request .items, #manage-items-request .items').droppable({
           accept: '.item-request',
           activeClass: 'active',
           drop: function(e, ui) {
@@ -190,7 +170,7 @@
             });
           }
         });
-        $(self.el).find('#manage-selected-access').droppable({
+        $(self.el).find('#manage-selected-access .items').droppable({
           accept: '.item-access-group, .item-access',
           activeClass: 'active',
           drop: function(e, ui) {
@@ -201,7 +181,7 @@
             });
           }
         });
-        $(self.el).find('#manage-items-access-group').droppable({
+        $(self.el).find('#manage-items-access-group .items').droppable({
           accept: '.item-access-group',
           activeClass: 'active',
           drop: function(e, ui) {
@@ -212,7 +192,7 @@
             });
           }
         });
-        $(self.el).find('#manage-items-access').droppable({
+        $(self.el).find('#manage-items-access .items').droppable({
           accept: '.item-access',
           activeClass: 'active',
           drop: function(e, ui) {
@@ -244,11 +224,34 @@
       self = this;
       return _.parallel([
         function(callback) {
-          return appendItems(self.el, accesses, $defineAccess, callback);
+          accesses.view.render();
+          return callback();
         }, function(callback) {
-          return appendItems(self.el, accessGroups, $defineAccessGroup, callback);
+          accessGroups.view.render();
+          return callback();
         }
       ], function(err) {
+        $(self.el).find('#define-delete').droppable({
+          accept: '.item-access-group, .item-access',
+          activeClass: 'active',
+          drop: function(e, ui) {
+            var delUrl;
+            if ($(ui.draggable[0]).hasClass('item-access-group') > 0) {
+              delUrl = '/access-group';
+            } else if ($(ui.draggable[0]).hasClass('item-access') > 0) {
+              delUrl = '/access';
+            }
+            return $.ajax({
+              type: 'DEL',
+              url: delUrl + '/' + $(ui.draggable[0]).data('slug'),
+              success: function(data) {
+                return alert('Item successfully deleted!');
+              }
+            });
+          }
+        });
+        $(self.el).find(defineAccess).append(accesses.view.el);
+        $(self.el).find(defineAccessGroup).append(accessGroups.view.el);
         return changePage(self.el);
       });
     };
@@ -268,10 +271,12 @@
       enable: true
     };
     FormView.prototype.tagName = 'form';
+    FormView.prototype.className = 'define-form';
     FormView.prototype.events = {
       'submit': 'submit'
     };
     FormView.prototype.initialize = function() {
+      _.extend(this.locals, this.options);
       this.setTitle();
       return this.render();
     };
@@ -295,21 +300,40 @@
       return $('#define-info-pane .col-inner').empty().append(this.el);
     };
     FormView.prototype.submit = function(e) {
-      var access, attrs;
+      var a, ag, attrs;
       attrs = $(this.el).serializeObject();
       switch (this.options.item) {
         case 'access':
-          access = accesses.create(attrs);
-          console.log(access);
+          a = accesses.create(attrs, {
+            success: function(model, response) {
+              alert('Access created successfully!');
+              accesses.view.render();
+              return $(defineAccess).append(accesses.view.el);
+            },
+            error: function(model, response) {
+              return alert('Error creating access:' + response);
+            }
+          });
+          break;
+        case 'access-group':
+          ag = accessGroups.create(attrs, {
+            success: function(model, response) {
+              alert('Access group created successfully!');
+              accessGroups.view.render();
+              return $(defineAccessGroup).append(accessGroups.view.el);
+            },
+            error: function(model, response) {
+              return alert('Error creating access group:' + response);
+            }
+          });
       }
       return e.preventDefault();
     };
     return FormView;
   })();
   window.nacl.views = {
-    RequestItemView: RequestItemView,
-    AccessItemView: AccessItemView,
-    AccessGroupItemView: AccessGroupItemView,
+    ItemView: ItemView,
+    CollectionView: CollectionView,
     ManageView: ManageView,
     DefineView: DefineView,
     FormView: FormView

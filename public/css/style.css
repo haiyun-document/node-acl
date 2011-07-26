@@ -109,12 +109,21 @@ summary {
   outline: 0;
   display: block;
 }
+body,
+input,
+textarea {
+  font-family: "Lora", serif;
+  font-size: 14px;
+  line-height: 1.5em;
+}
 h1,
 h2,
 h3 {
   font-weight: normal;
-  font-family: "Shanti", sans-serif;
   text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+}
+h1 {
+  font-family: "Shanti", sans-serif;
 }
 a {
   color: #00717d;
@@ -312,9 +321,6 @@ nav li {
   border: none;
 }
 body {
-  font-family: "Lora", serif;
-  font-size: 14px;
-  line-height: 1.5em;
   background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAGQCAIAAADgOp2MAAAABmJLR0QA/wD/AP+gvaeTAAAAfUlEQVQ4jbWTOw7AIAxDrdz/iD1E5y7uVAkU8lPSAQlhOcCLg+e+BICQFACHZZ0vOh0t8n77Y436m8jivetiXD/UTY5R3V2j4vEXS0OfYOHmKlHb9SbzMcFC9aP4p463zWLXda4K/tFc9bLVm/MBlibHWo/zc97Jlcei5X8B+aNakDLUQk0AAAAASUVORK5CYII=") #f2d8a7 repeat-x;
 }
 .inner-wrapper {
@@ -556,6 +562,15 @@ body {
 #define header h2 {
   color: #00717d;
 }
+#define header h1 {
+  display: inline-block;
+  vertical-align: top;
+  width: 600px;
+}
+.ie7 #define header h1 {
+  display: inline;
+  zoom: 1;
+}
 #define section section header {
   border-color: #122d35;
 }
@@ -583,15 +598,30 @@ body {
   font-size: 16.8px;
   line-height: 1.5em;
 }
-.access-info hgroup {
-  margin-bottom: 21px;
+#define-delete {
+  display: inline-block;
+  vertical-align: top;
+  width: 48px;
+  height: 48px;
+  padding: 21px;
+  border: 5px solid #ccc;
 }
-.access-info .col-inner {
-  margin-top: 42px;
+.ie7 #define-delete {
+  display: inline;
+  zoom: 1;
+}
+#define-delete.active {
+  border-color: #fc0;
+}
+#define-info-pane .col-inner {
   background: #faf0dc;
   -webkit-box-shadow: inset 0px 0px 3px rgba(0,0,0,0.2);
   -moz-box-shadow: inset 0px 0px 3px rgba(0,0,0,0.2);
   box-shadow: inset 0px 0px 3px rgba(0,0,0,0.2);
+  padding: 21px;
+}
+.access-info hgroup {
+  margin-bottom: 21px;
 }
 .access-info h1 {
   font-size: 25.2px;
@@ -635,4 +665,39 @@ body {
 }
 .access-info dd.deny {
   color: #c00;
+}
+.define-form h1 {
+  font-size: 25.2px;
+  line-height: 1.5em;
+  color: #00717d;
+}
+.define-form label {
+  font-size: 16.8px;
+  line-height: 1.5em;
+  display: block;
+  cursor: pointer;
+}
+.define-form label small {
+  font-size: 12.6px;
+  line-height: 1.5em;
+}
+.define-form label[for="form-enable"] {
+  display: inline;
+}
+.define-form input[type="text"],
+.define-form textarea {
+  font-size: 16.8px;
+  line-height: 1.5em;
+  width: 100%;
+}
+.define-form input[type="submit"] {
+  font-size: 16.8px;
+  line-height: 1.5em;
+  width: 80%;
+  margin: 0 auto;
+  display: block;
+}
+.define-form input[type="checkbox"] {
+  width: 21px;
+  height: 21px;
 }

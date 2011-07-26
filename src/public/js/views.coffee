@@ -23,14 +23,14 @@ _.extend(window.nacl.templates, smallTemplates)
 # View variables
 $content = $('#content')
 
-$manageRequest = '#manage-items-request'
-$manageAccess = '#manage-items-access'
-$manageAccessGroup = '#manage-items-access-group'
-$manageShortlistRequest = '#manage-shortlist-request'
-$manageShortlistAccess = '#manage-shortlist-access'
+manageRequest = '#manage-items-request'
+manageAccess = '#manage-items-access'
+manageAccessGroup = '#manage-items-access-group'
+manageShortlistRequest = '#manage-shortlist-request'
+manageShortlistAccess = '#manage-shortlist-access'
 
-$defineAccess = '#define-items-access'
-$defineAccessGroup = '#define-items-access-group'
+defineAccess = '#define-items-access'
+defineAccessGroup = '#define-items-access-group'
 
 # Resize content height
 setContentHeight = ->
@@ -89,51 +89,26 @@ $.fn.serializeObject = ->
 
 
 # Individual item views
-class RequestItemView extends Backbone.View
-  tmpl: nacl.templates.requestItem
+class ItemView extends Backbone.View
   tagName: 'article'
-  className: 'item-request'
-  events:
-    'click' : 'click'
   render: ->
-    $(@el).html(@tmpl(@model.toJSON()))
-    
-    $(@el).draggable
-      revert: 'invalid'
-      containment: '#content'
-      cursor: 'crosshair'
-      zIndex: 3000
-      
-      
-  click: (e) ->
-    console.log e.target
-  
-class AccessItemView extends Backbone.View
-  tmpl: nacl.templates.accessItem
-  tagName: 'article'
-  className: 'item-access'
-  render: ->
-    $(@el).html(@tmpl(@model.toJSON()))
-    
-    $(@el).draggable
-      revert: 'invalid'
-      containment: '#content'
-      cursor: 'crosshair'
-      zIndex: 3000
-  
-class AccessGroupItemView extends Backbone.View
-  tmpl: nacl.templates.accessGroupItem
-  tagName: 'article'
-  className: 'item-access-group'
-  render: ->
-    $(@el).html(@tmpl(@model.toJSON()))
-    
+    $(@el).data('slug', @model.get('slug'))
+    $(@el).html(@options.tmpl(@model.toJSON()))
     $(@el).draggable
       revert: 'invalid'
       containment: '#content'
       cursor: 'crosshair'
       zIndex: 3000
 
+class CollectionView extends Backbone.View
+  render: ->
+    self = @
+    _.each @collection.models, (model) ->
+      if $(@el).find(model.view.el).length < 1
+        if $(model.view.el).html() is '' 
+          model.view.render()
+        $(self.el).append(model.view.el)
+        
 # Pages views
 class ManageView extends Backbone.View
   tmpl : nacl.templates.manage
@@ -145,33 +120,42 @@ class ManageView extends Backbone.View
   render: ->
     self = @
     _.parallel [
-      (callback) -> appendItems(self.el, requests, $manageRequest, callback)
-      (callback) -> appendItems(self.el, accesses, $manageAccess, callback)
-      (callback) -> appendItems(self.el, accessGroups, $manageAccessGroup, callback)
+      (callback) -> 
+        requests.view.render()
+        $(self.el).find(manageRequest).append(requests.view.el)
+        callback()
+      (callback) ->   
+        accesses.view.render()
+        $(self.el).find(manageAccess).append(accesses.view.el)
+        callback()
+      (callback) -> 
+        accessGroups.view.render()
+        $(self.el).find(manageAccessGroup).append(accessGroups.view.el)
+        callback()
     ]
     , (err) ->
-      $(self.el).find('#manage-selected-request, #manage-items-request').droppable
+      $(self.el).find('#manage-selected-request .items, #manage-items-request .items').droppable
         accept: '.item-request'
         activeClass: 'active'
         drop: (e, ui) ->
           $(e.target).append(ui.draggable)
           $(ui.draggable).css({left: 'auto', top: 'auto'})
       
-      $(self.el).find('#manage-selected-access').droppable
+      $(self.el).find('#manage-selected-access .items').droppable
         accept: '.item-access-group, .item-access'
         activeClass: 'active'
         drop: (e, ui) ->
           $(e.target).append(ui.draggable)
           $(ui.draggable).css({left: 'auto', top: 'auto'})
       
-      $(self.el).find('#manage-items-access-group').droppable
+      $(self.el).find('#manage-items-access-group .items').droppable
         accept: '.item-access-group'
         activeClass: 'active'
         drop: (e, ui) ->
           $(e.target).append(ui.draggable)
           $(ui.draggable).css({left: 'auto', top: 'auto'})
       
-      $(self.el).find('#manage-items-access').droppable
+      $(self.el).find('#manage-items-access .items').droppable
         accept: '.item-access'
         activeClass: 'active'
         drop: (e, ui) ->
@@ -190,10 +174,31 @@ class DefineView extends Backbone.View
   render: ->
     self = @
     _.parallel [
-      (callback) -> appendItems(self.el, accesses, $defineAccess, callback)
-      (callback) -> appendItems(self.el, accessGroups, $defineAccessGroup, callback)
+      (callback) -> 
+        accesses.view.render()        
+        callback()
+      (callback) -> 
+        accessGroups.view.render()
+        callback()
     ]
     , (err) ->
+      $(self.el).find('#define-delete').droppable
+        accept: '.item-access-group, .item-access'
+        activeClass: 'active'
+        drop: (e, ui) ->
+          if $(ui.draggable[0]).hasClass('item-access-group') > 0
+            delUrl = '/access-group'
+          else if $(ui.draggable[0]).hasClass('item-access') > 0
+            delUrl = '/access'
+          
+          $.ajax
+            type: 'DEL'
+            url: delUrl + '/' + $(ui.draggable[0]).data('slug')
+            success: (data) ->
+              alert('Item successfully deleted!')
+      
+      $(self.el).find(defineAccess).append(accesses.view.el)
+      $(self.el).find(defineAccessGroup).append(accessGroups.view.el)
       changePage(self.el)
 
 class FormView extends Backbone.View
@@ -205,9 +210,11 @@ class FormView extends Backbone.View
     desc: ''
     enable: true
   tagName: 'form'
+  className: 'define-form'
   events: 
     'submit': 'submit'
   initialize: ->
+    _.extend(@locals, @options)
     @setTitle()
     @render()
   setTitle: ->
@@ -225,17 +232,29 @@ class FormView extends Backbone.View
     attrs = $(@el).serializeObject()
     switch @options.item
       when 'access'
-        access = accesses.create attrs
-        console.log access
-      
+        a = accesses.create attrs,
+          success: (model, response) ->
+            alert('Access created successfully!')
+            accesses.view.render()
+            $(defineAccess).append(accesses.view.el)
+          error: (model, response) ->
+            alert('Error creating access:' + response)
+            
+      when 'access-group'
+        ag = accessGroups.create attrs,
+          success: (model, response) ->
+            alert('Access group created successfully!')
+            accessGroups.view.render()
+            $(defineAccessGroup).append(accessGroups.view.el)
+          error: (model, response) ->
+            alert('Error creating access group:' + response)
       
     e.preventDefault()
     
 # Exports module
 window.nacl.views = 
-  RequestItemView: RequestItemView
-  AccessItemView: AccessItemView
-  AccessGroupItemView: AccessGroupItemView
+  ItemView: ItemView
+  CollectionView: CollectionView
   ManageView: ManageView
   DefineView: DefineView
   FormView: FormView
