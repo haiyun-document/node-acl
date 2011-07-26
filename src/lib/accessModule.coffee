@@ -16,48 +16,51 @@ class AccessModule
             accessId = access._id.toString()
             callback(null,accessId)
       else
-        callback(1001)
+        callback(1002)
     catch e
       callback(e)
     return
 
   read: (data, callback) ->
     try
-      if data._id?
-        Access.findOne {_id: data._id}, (err, res) ->
+      if data.slug?
+        Access.findOne {slug: data.slug}, (err, res) ->
           if err?
             callback(1004)
           else
             callback(null, res)
       else
-        callback(1002)
+        Access.find {}, (err, res) ->
+          if err?
+            callback(1004)
+          else
+            callback(null, res)
     catch e
       callback(e)
     return
   
   update: (data, callback) ->
     try
-      if data.length is 0
-        Access.findOne {_id: data._id}, (err, res) ->
+      if data.slug? and (data.newSlug? or data.newName? or data.newEnable? or data.newDesc?)
+        Access.findOne {slug: data.slug}, (err, res) ->
           if err?
             callback(1004)
           else
             if res?
-              if data.slug?
-                res.slug = data.slug
-              if data.name?
-                res.name = data.name
-              if data.desc?
-                res.desc = data.desc
-              if data.enable?
-                res.enable = data.enable
+              if data.newSlug?
+                res.slug = data.newSlug
+              if data.newName?
+                res.name = data.newName
+              if data.newDesc?
+                res.desc = data.newDesc
+              if data.newEnable?
+                res.enable = data.newEnable
 
               res.save (err) ->
                 if err?
                   callback(1003)
                 else
                   callback(null)
-
             else
               callback(1005)
       else
@@ -68,11 +71,14 @@ class AccessModule
 
   delete: (data, callback) ->
     try
-      Access.remove {_id: data._id}, (err, res) ->
-        if err?
-          callback(1007)
-        else
-          callback(null)
+      if data.slug?
+        Access.remove {slug: data.slug}, (err, res) ->
+          if err?
+            callback(1007)
+          else
+            callback(null)
+      else
+        callback(1002)
     catch e
       callback(e)
     return
