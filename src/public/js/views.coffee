@@ -17,6 +17,7 @@ smallTemplates =
     """
       <h2 class="item-name">#{locals.name}</h2>
     """
+    
 _.extend(window.nacl.templates, smallTemplates)    
 
 # View variables
@@ -30,19 +31,6 @@ $manageShortlistAccess = '#manage-shortlist-access'
 
 $defineAccess = '#define-items-access'
 $defineAccessGroup = '#define-items-access-group'
-
-# Start/stop loading
-startLoad = ->
-  $content.addClass('loading')
-stopLoad = ->
-  $content.removeClass('loading')
-  
-changePage = (el) ->
-  startLoad()
-  $content.children('div:first').detach()
-  $content.append(el)
-  stopLoad()
-  setContentHeight()
 
 # Resize content height
 setContentHeight = ->
@@ -58,6 +46,26 @@ setContentHeight = ->
 setContentHeight()
 $(window).bind 'resize', -> setContentHeight()
 
+# Adds hashes to all links
+mapLinks = ->
+  $('a').each ->
+    if $(@).attr('href').indexOf('#/') < 0 
+      $(@).attr('href', '#' + $(@).attr('href'))
+
+# Start/stop loading
+startLoad = ->
+  $content.addClass('loading')
+stopLoad = ->
+  $content.removeClass('loading')
+  
+changePage = (el) ->
+  startLoad()
+  $content.children('div:first').detach()
+  $content.append(el)
+  stopLoad()
+  mapLinks()
+  setContentHeight()
+
 # Append item to page
 appendItems = (el, collection, container, callback) ->
   _.each collection.models, (model) ->
@@ -66,6 +74,19 @@ appendItems = (el, collection, container, callback) ->
         model.view.render()
       $(el).find(container).append(model.view.el)
   callback()
+
+# Serialize form plugin
+$.fn.serializeObject = ->
+  o = {}
+  a = @serializeArray()
+  $.each a, ->
+    if o[@name] != undefined
+      o[@name] = [ o[@name] ]  unless o[@name].push
+      o[@name].push @value or ""
+    else
+      o[@name] = @value or ""
+  o
+
 
 # Individual item views
 class RequestItemView extends Backbone.View
@@ -174,6 +195,41 @@ class DefineView extends Backbone.View
     ]
     , (err) ->
       changePage(self.el)
+
+class FormView extends Backbone.View
+  tmpl: nacl.templates.form
+  locals: 
+    title: ''
+    name: ''
+    slug: ''
+    desc: ''
+    enable: true
+  tagName: 'form'
+  events: 
+    'submit': 'submit'
+  initialize: ->
+    @setTitle()
+    @render()
+  setTitle: ->
+    switch @options.action
+      when 'create' then @locals.title = 'Create New'
+      when 'update' then @locals.title = 'Update'
+    switch @options.item
+      when 'access' then @locals.title += ' Access'
+      when 'access-group' then @locals.title += ' Access Group'
+  render: ->
+    $(@el).html(@tmpl.call(@, @locals))
+    $('#define-info-pane .col-inner').empty().append(@el)
+    
+  submit: (e) ->
+    attrs = $(@el).serializeObject()
+    switch @options.item
+      when 'access'
+        access = accesses.create attrs
+        console.log access
+      
+      
+    e.preventDefault()
     
 # Exports module
 window.nacl.views = 
@@ -182,3 +238,4 @@ window.nacl.views =
   AccessGroupItemView: AccessGroupItemView
   ManageView: ManageView
   DefineView: DefineView
+  FormView: FormView

@@ -4,6 +4,12 @@ class Router extends Backbone.Router
     '/': 'manage'
     '/manage': 'manage'
     '/define': 'define'
+    '/define/:item/create': 'defineCreate'
+  
+  gotoParent: (parent) ->
+    href = window.location.hash
+    @navigate parent, true
+    @navigate href
   
   manage: ->
     if @manageView?
@@ -18,6 +24,15 @@ class Router extends Backbone.Router
     else
       @defineView = new nacl.views.DefineView()
     $('a[href*=define]').parent().addClass('active').siblings().removeClass('active')
+    
+  defineCreate: (item) ->
+    if $('#define').length < 1
+      @gotoParent('/define')
+    options = 
+      item: item
+      action: 'create'
+      page: 'define'
+    new nacl.views.FormView(options)
 
 # Document ready initialization
 $ ->
@@ -29,7 +44,4 @@ $ ->
   if window.location.href.indexOf('#/') < 0
     window.location.href = "#{window.location.protocol}//#{window.location.host}##{window.location.pathname}"
   
-  # Adds hashes to all links
-  $('nav a').each ->
-    if $(@).attr('href').indexOf('#/') < 0 
-      $(@).attr('href', '#' + $(@).attr('href')) 
+  

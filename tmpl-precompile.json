@@ -8,7 +8,8 @@
             "output": "/public/js/templates.js",
             "templates": [
                 "manage",
-                "define"
+                "define",
+                "form"
             ]
         }
     ]

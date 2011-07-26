@@ -16,7 +16,14 @@
     Router.prototype.routes = {
       '/': 'manage',
       '/manage': 'manage',
-      '/define': 'define'
+      '/define': 'define',
+      '/define/:item/create': 'defineCreate'
+    };
+    Router.prototype.gotoParent = function(parent) {
+      var href;
+      href = window.location.hash;
+      this.navigate(parent, true);
+      return this.navigate(href);
     };
     Router.prototype.manage = function() {
       if (this.manageView != null) {
@@ -34,18 +41,25 @@
       }
       return $('a[href*=define]').parent().addClass('active').siblings().removeClass('active');
     };
+    Router.prototype.defineCreate = function(item) {
+      var options;
+      if ($('#define').length < 1) {
+        this.gotoParent('/define');
+      }
+      options = {
+        item: item,
+        action: 'create',
+        page: 'define'
+      };
+      return new nacl.views.FormView(options);
+    };
     return Router;
   })();
   $(function() {
     new Router();
     Backbone.history.start();
     if (window.location.href.indexOf('#/') < 0) {
-      window.location.href = "" + window.location.protocol + "//" + window.location.host + "#" + window.location.pathname;
+      return window.location.href = "" + window.location.protocol + "//" + window.location.host + "#" + window.location.pathname;
     }
-    return $('nav a').each(function() {
-      if ($(this).attr('href').indexOf('#/') < 0) {
-        return $(this).attr('href', '#' + $(this).attr('href'));
-      }
-    });
   });
 }).call(this);
