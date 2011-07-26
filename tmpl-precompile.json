@@ -1,0 +1,15 @@
+{
+    "relative": true,
+    "groups": [
+        {
+            "uglify": false,
+            "namespace": "nacl.templates",
+            "source": "/views/",
+            "output": "/public/js/templates.js",
+            "templates": [
+                "manage",
+                "define"
+            ]
+        }
+    ]
+}

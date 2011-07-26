@@ -1,4 +1,6 @@
 express = require("express")
+mockData = require './lib/mockData'
+
 app = module.exports = express.createServer()
 app.configure ->
   app.set "views", __dirname + "/views"
@@ -21,13 +23,22 @@ app.helpers
   title: "node-acl"
 
 app.get "/", (req, res) ->
-  res.render "index"
+  res.render "manage"
   
 app.get "/define", (req, res) ->
   res.render "define"
 
-# Mock routes for frontend development
 
+# Mock routes for frontend development
+app.get "/request", (req, res) ->
+  res.send mockData.getRequests
+  
+app.get "/access", (req, res) ->
+  res.send mockData.getAccesses
+  
+app.get "/access-group", (req, res) ->
+  res.send mockData.getAccessGroups
+    
     
 app.listen 3000
 console.log "Express server listening on port %d in %s mode", app.address().port, app.settings.env

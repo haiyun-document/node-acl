@@ -1,0 +1,50 @@
+#manage
+  section#manage-request
+    .col-inner
+      header
+        h1 Requests
+        .filters
+          h2 Filters
+          a.add-filter#manage-add-request-filter(href="#", title="Add Request Filter") Add Filter
+          ul#manage-request-filters
+        form.search#search-request
+          input(type="text", name="search-request")
+          input(type="submit", value="Search")
+      
+      section.items#manage-items-request
+        h1 Results
+          
+  section#manage-shortlist
+    .col-inner
+      header
+        h1 Shortlist
+        form.search#search-access
+          input(type="text", name="search-access")
+          input(type="submit", value="Search")
+      
+      section.items#manage-selected-request
+        h1 Shortlisted Requests
+      
+      section.items#manage-selected-access
+        h1 Selected Access
+          
+      span.shadow.shadow-left
+      span.shadow.shadow-right
+              
+  section#manage-access
+    .col-inner
+      header
+        h1 Access
+        .filters
+          h2 Filters
+          a.add-filter#manage-add-access-filter(href="#", title="Add Access Filter") Add Filter
+          ul#manage-access-filters
+        form.search#search-access
+          input(type="text", name="search-access")
+          input(type="submit", value="Search")
+      
+      section.items#manage-items-access-group
+        h1 Access Groups
+          
+      section.items#manage-items-access
+        h1 Accesses
