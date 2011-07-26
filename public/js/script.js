@@ -20,17 +20,19 @@
     };
     Router.prototype.manage = function() {
       if (this.manageView != null) {
-        return this.manageView.render();
+        this.manageView.render();
       } else {
-        return this.manageView = new nacl.views.ManageView();
+        this.manageView = new nacl.views.ManageView();
       }
+      return $('a[href*=manage]').parent().addClass('active').siblings().removeClass('active');
     };
     Router.prototype.define = function() {
       if (this.defineView != null) {
-        return this.defineView.render();
+        this.defineView.render();
       } else {
-        return this.defineView = new nacl.views.DefineView();
+        this.defineView = new nacl.views.DefineView();
       }
+      return $('a[href*=define]').parent().addClass('active').siblings().removeClass('active');
     };
     return Router;
   })();

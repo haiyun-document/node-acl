@@ -2,12 +2,25 @@ _ = require('underscore')
 {AccessModule} = require('./accessModule')
 {AccessGroupModule} = require('./accessGroupModule')
 {Access,AccessGroup} = require('./models')
-#relationship = require('relationshipModule')
-#conflictManager = require('conflictManagerModule')
+
+###
+relationship = require('relationshipModule')
+conflictManager = require('conflictManagerModule')
+###
+
 class NodeAcl
-  ###
-    Access
-  ###
+  
+  # ## Access
+  
+  # `createAccess`: Creates a new access object
+  # data: 
+  #
+  #     slug: String, machine readable slug name
+  #     name: String, human readable name
+  #     desc: String, description
+  #     enabled: Boolean
+  #
+  
   createAccess: (data, callback) ->
     accessModule = new AccessModule()
     accessModule.create data, (err, accessId) ->
@@ -17,6 +30,13 @@ class NodeAcl
         callback(null,accessId)
     return
 
+  # `readAccess`: Returns a single or all access items
+  #
+  # data: 
+  #
+  #     slug: (optional) String
+  #
+  
   readAccess: (data, callback) ->
     accessModule = new AccessModule()
     accessModule.read data, (err, result) ->
@@ -25,7 +45,16 @@ class NodeAcl
       else
         callback(null,result)
     return
-
+    
+  # `updateAccess`: Updates access object
+  # data: 
+  #
+  #     slug: (Required) String, machine readable slug name
+  #     name: String, human readable name
+  #     desc: String, description
+  #     enabled: Boolean
+  #
+  
   updateAccess: (data, callback) ->
     accessModule = new AccessModule()
     accessModule.update data, (err, result) ->
@@ -34,7 +63,14 @@ class NodeAcl
       else
         callback(null)
     return 
-
+    
+  # `deleteAccess`: Deletes access object
+  #
+  # data: 
+  #
+  #     slug: (Required) String, machine readable slug name
+  #
+  
   deleteAccess: (data, callback) ->
     accessModule = new AccessModule()
     accessModule.delete data, (err, result) ->

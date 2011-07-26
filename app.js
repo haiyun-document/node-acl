@@ -1,8 +1,9 @@
 (function() {
-  var app, express, mockData;
+  var NodeAcl, app, express, mockData;
   express = require("express");
-  mockData = require('./lib/mockData');
   app = module.exports = express.createServer();
+  mockData = require('./lib/mockData');
+  NodeAcl = require("./lib/nodeAcl");
   app.configure(function() {
     app.set("views", __dirname + "/views");
     app.set("view engine", "jade");
@@ -26,6 +27,9 @@
   app.get("/", function(req, res) {
     return res.render("manage");
   });
+  app.get("/manage", function(req, res) {
+    return res.render("manage");
+  });
   app.get("/define", function(req, res) {
     return res.render("define");
   });
@@ -35,6 +39,12 @@
   app.get("/access", function(req, res) {
     return res.send(mockData.getAccesses);
   });
+  app.get("/access/:slug", function(req, res) {
+    return res.send(mockData.getAccesses);
+  });
+  app.post("/access/:slug", function(req, res) {});
+  app.put("/access/:slug", function(req, res) {});
+  app.del("/access/:slug", function(req, res) {});
   app.get("/access-group", function(req, res) {
     return res.send(mockData.getAccessGroups);
   });

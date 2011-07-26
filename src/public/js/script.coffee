@@ -10,12 +10,14 @@ class Router extends Backbone.Router
       @manageView.render()
     else
       @manageView = new nacl.views.ManageView()
+    $('a[href*=manage]').parent().addClass('active').siblings().removeClass('active')
 
   define: ->
     if @defineView?
       @defineView.render()
     else
       @defineView = new nacl.views.DefineView()
+    $('a[href*=define]').parent().addClass('active').siblings().removeClass('active')
 
 # Document ready initialization
 $ ->

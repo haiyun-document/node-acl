@@ -3,7 +3,6 @@ _ = require('underscore')
 
 
 class AccessModule
-
   create: (data, callback) ->
     try
       if data.slug? and data.name?
