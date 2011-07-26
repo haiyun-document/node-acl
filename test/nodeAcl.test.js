@@ -1,8 +1,8 @@
 (function() {
-  var Access, AccessGroup, EventPromise, NodeAcl, assert, invalidAddMock, invalidCreateAccess, invalidDeleteAccess, invalidDeleteAccessGroup, invalidDeleteGroupMock, invalidDeleteMock, invalidSlugAddGroupMock, invalidSlugCreateAccessGroup, invalidUpdateAccess, invalidUpdateAccessGroup, invalidUpdateGroupMock, invalidUpdateMock, manageAccessGroupTest, manageAccessTest, perfectAccessUpdateAccessGroup, perfectAccessUpdateGroupMock, perfectAddGroupMock, perfectAddMock, perfectCreateAccess, perfectCreateGroupAccess, perfectDeleteAccess, perfectDeleteAccessGroup, perfectDeleteGroupMock, perfectDeleteMock, perfectReadAllAccess, perfectReadAllAccessGroup, perfectReadAllGroupMock, perfectReadAllMock, perfectReadGroupMock, perfectReadMock, perfectReadOneAccess, perfectReadOneAccessGroup, perfectSlugUpdateAccessGroup, perfectSlugUpdateGroupMock, perfectUpdateAccess, perfectUpdateMock, vows, _, _ref;
+  var Access, AccessGroup, EventPromise, assert, invalidAddMock, invalidCreateAccess, invalidDeleteAccess, invalidDeleteAccessGroup, invalidDeleteGroupMock, invalidDeleteMock, invalidSlugAddGroupMock, invalidSlugCreateAccessGroup, invalidUpdateAccess, invalidUpdateAccessGroup, invalidUpdateGroupMock, invalidUpdateMock, manageAccessGroupTest, manageAccessTest, nodeAcl, perfectAccessUpdateAccessGroup, perfectAccessUpdateGroupMock, perfectAddGroupMock, perfectAddMock, perfectCreateAccess, perfectCreateGroupAccess, perfectDeleteAccess, perfectDeleteAccessGroup, perfectDeleteGroupMock, perfectDeleteMock, perfectReadAllAccess, perfectReadAllAccessGroup, perfectReadAllGroupMock, perfectReadAllMock, perfectReadGroupMock, perfectReadMock, perfectReadOneAccess, perfectReadOneAccessGroup, perfectSlugUpdateAccessGroup, perfectSlugUpdateGroupMock, perfectUpdateAccess, perfectUpdateMock, vows, _, _ref;
   vows = require('vows');
   assert = require('assert');
-  NodeAcl = require('../lib/nodeAcl').NodeAcl;
+  nodeAcl = require('../lib/nodeAcl');
   _ref = require('../lib/models'), Access = _ref.Access, AccessGroup = _ref.AccessGroup;
   EventPromise = require('events').EventEmitter;
   _ = require('underscore');
@@ -113,9 +113,7 @@
       topic: perfectAddMock,
       'Given new access was added into ACL db successfully': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.createAccess(data, this.callback);
+          return nodeAcl.createAccess(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -128,9 +126,7 @@
       topic: invalidAddMock,
       'Given access name is empty': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.createAccess(data, this.callback);
+          return nodeAcl.createAccess(data, this.callback);
         },
         'THEN it should return an error code 1002': function(err, res) {
           return assert.equal(err, 1002);
@@ -143,9 +139,7 @@
       topic: perfectReadMock,
       'Given slug name is provided': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.readAccess(data, this.callback);
+          return nodeAcl.readAccess(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -158,9 +152,7 @@
       topic: perfectReadAllMock,
       'Given input parameter is empty': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.readAccess(data, this.callback);
+          return nodeAcl.readAccess(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           assert.isNull(err);
@@ -174,9 +166,7 @@
       topic: perfectUpdateMock,
       'Given input fields are valid': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.updateAccess(data, this.callback);
+          return nodeAcl.updateAccess(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -189,9 +179,7 @@
       topic: invalidUpdateMock,
       'Given empty update fields': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.updateAccess(data, this.callback);
+          return nodeAcl.updateAccess(data, this.callback);
         },
         'THEN it should return an error code 1006': function(err, res) {
           return assert.equal(err, 1006);
@@ -204,9 +192,7 @@
       topic: perfectDeleteMock,
       'Given input fields are valid': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.deleteAccess(data, this.callback);
+          return nodeAcl.deleteAccess(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -219,9 +205,7 @@
       topic: invalidDeleteMock,
       'Given invalid access slug': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.deleteAccess(data, this.callback);
+          return nodeAcl.deleteAccess(data, this.callback);
         },
         'THEN it should return an error code 1002': function(err, res) {
           return assert.equal(err, 1002);
@@ -303,9 +287,7 @@
       topic: perfectAddGroupMock,
       'Given new access group was added into ACL db successfully': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.createAccessGroup(data, this.callback);
+          return nodeAcl.createAccessGroup(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -318,9 +300,7 @@
       topic: invalidSlugAddGroupMock,
       'Given access group slug is empty': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.createAccessGroup(data, this.callback);
+          return nodeAcl.createAccessGroup(data, this.callback);
         },
         'THEN it should return an error code 1009': function(err, res) {
           return assert.equal(err, 1009);
@@ -333,9 +313,7 @@
       topic: perfectReadGroupMock,
       'Given slug name is provided': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.readAccessGroup(data, this.callback);
+          return nodeAcl.readAccessGroup(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -348,9 +326,7 @@
       topic: perfectReadAllGroupMock,
       'Given slug name is empty': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.readAccessGroup(data, this.callback);
+          return nodeAcl.readAccessGroup(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           assert.isNull(err);
@@ -364,9 +340,7 @@
       topic: perfectSlugUpdateGroupMock,
       'Given old and new slug are valid': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.updateAccessGroup(data, this.callback);
+          return nodeAcl.updateAccessGroup(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -379,9 +353,7 @@
       topic: perfectAccessUpdateGroupMock,
       'Given old slug and new access are valid': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.updateAccessGroup(data, this.callback);
+          return nodeAcl.updateAccessGroup(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -394,9 +366,7 @@
       topic: invalidUpdateGroupMock,
       'Given empty update fields': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.updateAccessGroup(data, this.callback);
+          return nodeAcl.updateAccessGroup(data, this.callback);
         },
         'THEN it should return an error code 1006': function(err, res) {
           return assert.equal(err, 1009);
@@ -409,9 +379,7 @@
       topic: perfectDeleteGroupMock,
       'Given access group exists in ACL db': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.deleteAccessGroup(data, this.callback);
+          return nodeAcl.deleteAccessGroup(data, this.callback);
         },
         'THEN it should return no error': function(err, res) {
           return assert.isNull(err);
@@ -424,9 +392,7 @@
       topic: invalidDeleteGroupMock,
       'Given access group doesnt exist': {
         topic: function(data) {
-          var acl;
-          acl = new NodeAcl();
-          return acl.deleteAccessGroup(data, this.callback);
+          return nodeAcl.deleteAccessGroup(data, this.callback);
         },
         'THEN it should return an error code 1009': function(err, res) {
           return assert.equal(err, 1009);

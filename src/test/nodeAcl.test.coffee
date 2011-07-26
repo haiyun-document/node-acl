@@ -1,6 +1,6 @@
 vows = require('vows')
 assert = require('assert')
-{NodeAcl} = require('../lib/nodeAcl')
+nodeAcl = require('../lib/nodeAcl')
 {Access,AccessGroup} = require('../lib/models')
 EventPromise = require('events').EventEmitter
 _ = require('underscore')
@@ -118,8 +118,7 @@ perfectCreateAccess =
     topic: perfectAddMock
     'Given new access was added into ACL db successfully':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.createAccess(data, this.callback)
+        nodeAcl.createAccess(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -128,8 +127,7 @@ invalidCreateAccess =
     topic: invalidAddMock
     'Given access name is empty':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.createAccess(data, this.callback)
+        nodeAcl.createAccess(data, this.callback)
       'THEN it should return an error code 1002': (err, res) ->
         assert.equal err, 1002
 
@@ -138,8 +136,7 @@ perfectReadOneAccess =
     topic: perfectReadMock
     'Given slug name is provided':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.readAccess(data, this.callback)
+        nodeAcl.readAccess(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -148,8 +145,8 @@ perfectReadAllAccess =
     topic: perfectReadAllMock
     'Given input parameter is empty':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.readAccess(data, this.callback)
+        
+        nodeAcl.readAccess(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
         assert.isArray res
@@ -159,8 +156,7 @@ perfectUpdateAccess =
     topic: perfectUpdateMock
     'Given input fields are valid':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.updateAccess(data, this.callback)
+        nodeAcl.updateAccess(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -170,8 +166,7 @@ invalidUpdateAccess =
     topic: invalidUpdateMock
     'Given empty update fields':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.updateAccess(data, this.callback)
+        nodeAcl.updateAccess(data, this.callback)
       'THEN it should return an error code 1006': (err, res) ->
         assert.equal err, 1006
 
@@ -181,8 +176,8 @@ perfectDeleteAccess =
     topic: perfectDeleteMock
     'Given input fields are valid':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.deleteAccess(data, this.callback)
+        
+        nodeAcl.deleteAccess(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -192,8 +187,7 @@ invalidDeleteAccess =
     topic: invalidDeleteMock
     'Given invalid access slug':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.deleteAccess(data, this.callback)
+        nodeAcl.deleteAccess(data, this.callback)
       'THEN it should return an error code 1002': (err, res) ->
         assert.equal err, 1002
 ###
@@ -281,8 +275,8 @@ perfectCreateGroupAccess =
     topic: perfectAddGroupMock
     'Given new access group was added into ACL db successfully':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.createAccessGroup(data, this.callback)
+        
+        nodeAcl.createAccessGroup(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -291,8 +285,8 @@ invalidSlugCreateAccessGroup =
     topic: invalidSlugAddGroupMock
     'Given access group slug is empty':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.createAccessGroup(data, this.callback)
+        
+        nodeAcl.createAccessGroup(data, this.callback)
       'THEN it should return an error code 1009': (err, res) ->
         assert.equal err, 1009
 
@@ -301,8 +295,8 @@ perfectReadOneAccessGroup =
     topic: perfectReadGroupMock
     'Given slug name is provided':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.readAccessGroup(data, this.callback)
+        
+        nodeAcl.readAccessGroup(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -311,8 +305,8 @@ perfectReadAllAccessGroup =
     topic: perfectReadAllGroupMock
     'Given slug name is empty':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.readAccessGroup(data, this.callback)
+        
+        nodeAcl.readAccessGroup(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
         assert.isArray res
@@ -322,8 +316,8 @@ perfectSlugUpdateAccessGroup =
     topic: perfectSlugUpdateGroupMock
     'Given old and new slug are valid':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.updateAccessGroup(data, this.callback)
+        
+        nodeAcl.updateAccessGroup(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -332,8 +326,7 @@ perfectAccessUpdateAccessGroup =
     topic: perfectAccessUpdateGroupMock
     'Given old slug and new access are valid':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.updateAccessGroup(data, this.callback)
+        nodeAcl.updateAccessGroup(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -342,8 +335,7 @@ invalidUpdateAccessGroup =
     topic: invalidUpdateGroupMock
     'Given empty update fields':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.updateAccessGroup(data, this.callback)
+        nodeAcl.updateAccessGroup(data, this.callback)
       'THEN it should return an error code 1006': (err, res) ->
         assert.equal err, 1009
 
@@ -352,8 +344,7 @@ perfectDeleteAccessGroup =
     topic: perfectDeleteGroupMock
     'Given access group exists in ACL db':
       topic: (data) ->
-        acl = new NodeAcl()
-        acl.deleteAccessGroup(data, this.callback)
+        nodeAcl.deleteAccessGroup(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
@@ -361,9 +352,8 @@ invalidDeleteAccessGroup =
   'Delete ACL access group with invalid input: --':
     topic: invalidDeleteGroupMock
     'Given access group doesnt exist':
-      topic: (data) ->
-        acl = new NodeAcl()
-        acl.deleteAccessGroup(data, this.callback)
+      topic: (data) -> 
+        nodeAcl.deleteAccessGroup(data, this.callback)
       'THEN it should return an error code 1009': (err, res) ->
         assert.equal err, 1009
 

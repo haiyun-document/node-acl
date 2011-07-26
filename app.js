@@ -1,10 +1,9 @@
 (function() {
-  var app, express, mockData, nacl, nodeAcl;
+  var app, express, mockData, nodeAcl;
   express = require("express");
   app = module.exports = express.createServer();
   mockData = require('./lib/mockData');
   nodeAcl = require("./lib/nodeAcl");
-  nacl = new nodeAcl.NodeAcl();
   app.configure(function() {
     app.set("views", __dirname + "/views");
     app.set("view engine", "jade");
@@ -38,7 +37,7 @@
     return res.send(mockData.getRequests);
   });
   app.get("/access", function(req, res) {
-    return nacl.readAccess({}, function(err, result) {
+    return nodeAcl.readAccess({}, function(err, result) {
       return res.send(result);
     });
   });
@@ -47,14 +46,14 @@
     data = {
       slug: req.params.slug
     };
-    return nacl.readAccess(data, function(err, result) {
+    return nodeAcl.readAccess(data, function(err, result) {
       return res.send(result);
     });
   });
   app.post("/access", function(req, res) {
     var data;
     data = req.body;
-    return nacl.createAccess(data, function(err, result) {
+    return nodeAcl.createAccess(data, function(err, result) {
       return res.send(result);
     });
   });
@@ -62,7 +61,7 @@
     var data;
     data = req.body;
     data.slug = req.params.slug;
-    return nacl.updateAccess(data, function(err, result) {
+    return nodeAcl.updateAccess(data, function(err, result) {
       return res.send(result);
     });
   });
@@ -70,7 +69,7 @@
     var data;
     data = req.body;
     data.slug = req.params.slug;
-    return nacl.deleteAccess(data, function(err, result) {
+    return nodeAcl.deleteAccess(data, function(err, result) {
       return res.send(result);
     });
   });

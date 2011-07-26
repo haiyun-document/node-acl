@@ -5,7 +5,6 @@ app = module.exports = express.createServer()
 # Module requires
 mockData = require './lib/mockData'
 nodeAcl = require("./lib/nodeAcl")
-nacl = new nodeAcl.NodeAcl()
 
 app.configure ->
   app.set "views", __dirname + "/views"
@@ -27,6 +26,8 @@ app.configure "production", ->
 app.helpers
   title: "node-acl"
 
+# nodeAcl = new NodeAcl()
+
 # Pages
 app.get "/", (req, res) ->
   res.render "manage"
@@ -44,7 +45,7 @@ app.get "/request", (req, res) ->
 
 # Get all access  
 app.get "/access", (req, res) ->
-  nacl.readAccess {}, (err, result) ->
+  nodeAcl.readAccess {}, (err, result) ->
     res.send result
  
 # Get single access
@@ -52,14 +53,14 @@ app.get "/access/:slug", (req, res) ->
   data = 
     slug: req.params.slug
 
-  nacl.readAccess data, (err, result) ->
+  nodeAcl.readAccess data, (err, result) ->
     res.send result
   
 # Create new access
 app.post "/access", (req, res) ->
   data = req.body
   
-  nacl.createAccess data, (err, result) ->
+  nodeAcl.createAccess data, (err, result) ->
     res.send result
   
 # Update access
@@ -67,14 +68,14 @@ app.put "/access/:slug", (req, res) ->
   data = req.body
   data.slug = req.params.slug
 
-  nacl.updateAccess data, (err, result) ->
+  nodeAcl.updateAccess data, (err, result) ->
     res.send result
 
 # Delete access
 app.del "/access/:slug", (req, res) ->
   data = req.body
   data.slug = req.params.slug
-  nacl.deleteAccess data, (err, result) ->
+  nodeAcl.deleteAccess data, (err, result) ->
     res.send result
   
 

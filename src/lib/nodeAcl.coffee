@@ -8,7 +8,7 @@ relationship = require('relationshipModule')
 conflictManager = require('conflictManagerModule')
 ###
 
-class NodeAcl
+nodeAcl = 
   
   # ## Access
   
@@ -139,5 +139,4 @@ class NodeAcl
     return
 
 
-module.exports =
-  NodeAcl: NodeAcl
+module.exports = nodeAcl
