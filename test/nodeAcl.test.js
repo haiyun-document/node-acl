@@ -1,5 +1,5 @@
 (function() {
-  var Access, AccessGroup, EventPromise, NodeAcl, assert, insertStubs, invalidAddMock, invalidCreateAccess, invalidReadAccess, invalidReadMock, manageAccessTest, perfectAddMock, perfectCreateAccess, perfectReadAccess, perfectReadMock, setUp, tearDown, testPlayers, vows, _, _ref;
+  var Access, AccessGroup, EventPromise, NodeAcl, assert, insertStubs, invalidAddMock, invalidCreateAccess, invalidDeleteAccess, invalidDeleteMock, invalidUpdateAccess, invalidUpdateMock, manageAccessTest, perfectAddMock, perfectCreateAccess, perfectDeleteAccess, perfectDeleteMock, perfectReadAllAccess, perfectReadAllMock, perfectReadMock, perfectReadOneAccess, perfectUpdateAccess, perfectUpdateMock, setUp, tearDown, testPlayers, vows, _, _ref;
   vows = require('vows');
   assert = require('assert');
   NodeAcl = require('../lib/nodeAcl').NodeAcl;
@@ -20,10 +20,21 @@
     enable1: true
   };
   perfectReadMock = {
-    _id: '4e1c70d0ec27dba3de555601'
+    slug: 'viewVIPPromo'
   };
-  invalidReadMock = {
-    _id1: '4e1c70d0ec27dba3de555601'
+  perfectReadAllMock = {};
+  perfectUpdateMock = {
+    slug: 'viewVIPPromo',
+    newSlug: 'Updated slug!'
+  };
+  invalidUpdateMock = {
+    slug: 'viewVIPPromo'
+  };
+  perfectDeleteMock = {
+    slug: 'viewVIPPromo'
+  };
+  invalidDeleteMock = {
+    slug1: 'viewVIPPromo'
   };
   testPlayers = [
     {
@@ -96,16 +107,16 @@
           acl = new NodeAcl();
           return acl.createAccess(data, this.callback);
         },
-        'THEN it should return an error code 1001': function(err, res) {
-          return assert.equal(err, 1001);
+        'THEN it should return an error code 1002': function(err, res) {
+          return assert.equal(err, 1002);
         }
       }
     }
   };
-  perfectReadAccess = {
-    'Read access from ACL db: --': {
+  perfectReadOneAccess = {
+    'Read one access from ACL db: --': {
       topic: perfectReadMock,
-      'Given access is found on ACL db': {
+      'Given slug name is provided': {
         topic: function(data) {
           var acl;
           acl = new NodeAcl();
@@ -117,14 +128,75 @@
       }
     }
   };
-  invalidReadAccess = {
-    'Invalid read from ACL db: --': {
-      topic: invalidReadMock,
-      'Given access name is not found in ACL db': {
+  perfectReadAllAccess = {
+    'Read all access from ACL db: --': {
+      topic: perfectReadAllMock,
+      'Given input parameter is empty': {
         topic: function(data) {
           var acl;
           acl = new NodeAcl();
           return acl.readAccess(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          assert.isNull(err);
+          return assert.isArray(res);
+        }
+      }
+    }
+  };
+  perfectUpdateAccess = {
+    'Update ACL access: --': {
+      topic: perfectUpdateMock,
+      'Given input fields are valid': {
+        topic: function(data) {
+          var acl;
+          acl = new NodeAcl();
+          return acl.updateAccess(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          return assert.isNull(err);
+        }
+      }
+    }
+  };
+  invalidUpdateAccess = {
+    'Update ACL access with invalid input: --': {
+      topic: invalidUpdateMock,
+      'Given empty update fields': {
+        topic: function(data) {
+          var acl;
+          acl = new NodeAcl();
+          return acl.updateAccess(data, this.callback);
+        },
+        'THEN it should return an error code 1006': function(err, res) {
+          return assert.equal(err, 1006);
+        }
+      }
+    }
+  };
+  perfectDeleteAccess = {
+    'Delete ACL access: --': {
+      topic: perfectDeleteMock,
+      'Given input fields are valid': {
+        topic: function(data) {
+          var acl;
+          acl = new NodeAcl();
+          return acl.deleteAccess(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          return assert.isNull(err);
+        }
+      }
+    }
+  };
+  invalidDeleteAccess = {
+    'Delete ACL access with invalid input: --': {
+      topic: invalidDeleteMock,
+      'Given invalid access id': {
+        topic: function(data) {
+          var acl;
+          acl = new NodeAcl();
+          return acl.deleteAccess(data, this.callback);
         },
         'THEN it should return an error code 1002': function(err, res) {
           return assert.equal(err, 1002);
@@ -132,7 +204,7 @@
       }
     }
   };
-  manageAccessTest.addBatch(setUp).addBatch(perfectCreateAccess).addBatch(invalidCreateAccess).addBatch(perfectReadAccess).addBatch(invalidReadAccess).addBatch(tearDown)["export"](module);
+  manageAccessTest.addBatch(setUp).addBatch(perfectCreateAccess).addBatch(invalidCreateAccess).addBatch(perfectReadOneAccess).addBatch(perfectReadAllAccess).addBatch(perfectUpdateAccess).addBatch(invalidUpdateAccess).addBatch(perfectDeleteAccess).addBatch(invalidDeleteAccess).addBatch(tearDown)["export"](module);
   /*
   perfectAssignAccessNoConflict = 
     'Assign access to player without conflict: --':

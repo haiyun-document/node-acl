@@ -27,11 +27,21 @@ class NodeAcl
     return
 
   updateAccess: (data, callback) ->
-    callback('Function not ready')
+    accessModule = new AccessModule()
+    accessModule.update data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return 
 
   deleteAccess: (data, callback) ->
-    callback('Function not ready')
+    accessModule = new AccessModule()
+    accessModule.delete data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return 
   
   ###

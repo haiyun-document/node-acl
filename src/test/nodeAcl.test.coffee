@@ -20,10 +20,24 @@ invalidAddMock =
   enable1: true
 
 perfectReadMock =
-  _id: '4e1c70d0ec27dba3de555601'
+  slug: 'viewVIPPromo'
 
-invalidReadMock =
-  _id1: '4e1c70d0ec27dba3de555601'
+perfectReadAllMock = {}
+
+perfectUpdateMock =
+  slug: 'viewVIPPromo'
+  newSlug: 'Updated slug!'
+
+invalidUpdateMock =
+  slug: 'viewVIPPromo'
+
+
+perfectDeleteMock =
+  slug: 'viewVIPPromo'
+
+invalidDeleteMock =
+  slug1: 'viewVIPPromo'
+
 
 
 testPlayers = [
@@ -80,36 +94,83 @@ invalidCreateAccess =
       topic: (data) ->
         acl = new NodeAcl()
         acl.createAccess(data, this.callback)
-      'THEN it should return an error code 1001': (err, res) ->
-        assert.equal err, 1001
+      'THEN it should return an error code 1002': (err, res) ->
+        assert.equal err, 1002
 
-perfectReadAccess = 
-  'Read access from ACL db: --':
+perfectReadOneAccess = 
+  'Read one access from ACL db: --':
     topic: perfectReadMock
-    'Given access is found on ACL db':
+    'Given slug name is provided':
       topic: (data) ->
         acl = new NodeAcl()
         acl.readAccess(data, this.callback)
       'THEN it should return no error': (err, res) ->
         assert.isNull err
 
-invalidReadAccess = 
-  'Invalid read from ACL db: --':
-    topic: invalidReadMock
-    'Given access name is not found in ACL db':
+perfectReadAllAccess = 
+  'Read all access from ACL db: --':
+    topic: perfectReadAllMock
+    'Given input parameter is empty':
       topic: (data) ->
         acl = new NodeAcl()
         acl.readAccess(data, this.callback)
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+        assert.isArray res
+
+perfectUpdateAccess = 
+  'Update ACL access: --':
+    topic: perfectUpdateMock
+    'Given input fields are valid':
+      topic: (data) ->
+        acl = new NodeAcl()
+        acl.updateAccess(data, this.callback)
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+
+
+invalidUpdateAccess = 
+  'Update ACL access with invalid input: --':
+    topic: invalidUpdateMock
+    'Given empty update fields':
+      topic: (data) ->
+        acl = new NodeAcl()
+        acl.updateAccess(data, this.callback)
+      'THEN it should return an error code 1006': (err, res) ->
+        assert.equal err, 1006
+
+
+perfectDeleteAccess = 
+  'Delete ACL access: --':
+    topic: perfectDeleteMock
+    'Given input fields are valid':
+      topic: (data) ->
+        acl = new NodeAcl()
+        acl.deleteAccess(data, this.callback)
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+
+
+invalidDeleteAccess = 
+  'Delete ACL access with invalid input: --':
+    topic: invalidDeleteMock
+    'Given invalid access id':
+      topic: (data) ->
+        acl = new NodeAcl()
+        acl.deleteAccess(data, this.callback)
       'THEN it should return an error code 1002': (err, res) ->
         assert.equal err, 1002
-
 
 manageAccessTest
   .addBatch(setUp)
   .addBatch(perfectCreateAccess)
   .addBatch(invalidCreateAccess)
-  .addBatch(perfectReadAccess)
-  .addBatch(invalidReadAccess)
+  .addBatch(perfectReadOneAccess)
+  .addBatch(perfectReadAllAccess)
+  .addBatch(perfectUpdateAccess)
+  .addBatch(invalidUpdateAccess)
+  .addBatch(perfectDeleteAccess)
+  .addBatch(invalidDeleteAccess)
   .addBatch(tearDown)
   .export(module)
 ###
