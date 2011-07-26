@@ -1,0 +1,8 @@
+.git/*
+src/*
+public/*
+test/*
+views/*
+readme.md
+node_modules/*
+docs/*
