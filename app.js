@@ -1,6 +1,7 @@
 (function() {
-  var app, express;
+  var app, express, mockData;
   express = require("express");
+  mockData = require('./lib/mockData');
   app = module.exports = express.createServer();
   app.configure(function() {
     app.set("views", __dirname + "/views");
@@ -23,10 +24,19 @@
     title: "node-acl"
   });
   app.get("/", function(req, res) {
-    return res.render("index");
+    return res.render("manage");
   });
   app.get("/define", function(req, res) {
     return res.render("define");
+  });
+  app.get("/request", function(req, res) {
+    return res.send(mockData.getRequests);
+  });
+  app.get("/access", function(req, res) {
+    return res.send(mockData.getAccesses);
+  });
+  app.get("/access-group", function(req, res) {
+    return res.send(mockData.getAccessGroups);
   });
   app.listen(3000);
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);

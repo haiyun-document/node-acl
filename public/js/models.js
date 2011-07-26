@@ -8,12 +8,17 @@
     child.__super__ = parent.prototype;
     return child;
   };
+  window.nacl = window.nacl || {};
   Request = (function() {
     __extends(Request, Backbone.Model);
     function Request() {
       Request.__super__.constructor.apply(this, arguments);
     }
-    Request.prototype.initialize = function() {};
+    Request.prototype.initialize = function() {
+      return this.view = new nacl.views.RequestItemView({
+        model: this
+      });
+    };
     return Request;
   })();
   Access = (function() {
@@ -21,7 +26,11 @@
     function Access() {
       Access.__super__.constructor.apply(this, arguments);
     }
-    Access.prototype.initialize = function() {};
+    Access.prototype.initialize = function() {
+      return this.view = new nacl.views.AccessItemView({
+        model: this
+      });
+    };
     return Access;
   })();
   AccessGroup = (function() {
@@ -29,7 +38,11 @@
     function AccessGroup() {
       AccessGroup.__super__.constructor.apply(this, arguments);
     }
-    AccessGroup.prototype.initialize = function() {};
+    AccessGroup.prototype.initialize = function() {
+      return this.view = new nacl.views.AccessGroupItemView({
+        model: this
+      });
+    };
     return AccessGroup;
   })();
   Requests = (function() {
@@ -37,7 +50,11 @@
     function Requests() {
       Requests.__super__.constructor.apply(this, arguments);
     }
-    Requests.prototype.initialize = function() {};
+    Requests.prototype.url = '/request';
+    Requests.prototype.model = Request;
+    Requests.prototype.initialize = function() {
+      return this.fetch();
+    };
     return Requests;
   })();
   Accesses = (function() {
@@ -45,7 +62,11 @@
     function Accesses() {
       Accesses.__super__.constructor.apply(this, arguments);
     }
-    Accesses.prototype.initialize = function() {};
+    Accesses.prototype.url = '/access';
+    Accesses.prototype.model = Access;
+    Accesses.prototype.initialize = function() {
+      return this.fetch();
+    };
     return Accesses;
   })();
   AccessGroups = (function() {
@@ -53,10 +74,13 @@
     function AccessGroups() {
       AccessGroups.__super__.constructor.apply(this, arguments);
     }
-    AccessGroups.prototype.initialize = function() {};
+    AccessGroups.prototype.url = '/access-group';
+    AccessGroups.prototype.model = AccessGroup;
+    AccessGroups.prototype.initialize = function() {
+      return this.fetch();
+    };
     return AccessGroups;
   })();
-  window.nacl = window.nacl || {};
   nacl.models = {
     Request: Request,
     Access: Access,

@@ -1,5 +1,17 @@
+/* Loading */
+.loading 
+  background-image url(path('loading.gif')) !important
+  background-position center !important
+  background-repeat no-repeat !important
+  &>* 
+    display none !important
+
+/* Individual items */
 .items
   text-align center
+  min-height 200px
+  &.active
+    border 3px solid #ec0!important
 
   h1
     text-align left
@@ -62,7 +74,7 @@
     &.active
       item-gradient-bg(darken($c-light, 50%))
     
-    
+/* Search form and filters */
 .search, .filters
   inline-block()
 
