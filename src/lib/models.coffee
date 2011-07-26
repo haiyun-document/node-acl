@@ -20,7 +20,7 @@ AccessSchema = new Schema
   createdAt: {type: Date, default: new Date()}
 
 EmbedAccess = new Schema
-  accessID: ObjectId
+  _id: ObjectId
   slug: String
   perm: String
 

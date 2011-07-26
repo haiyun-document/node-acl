@@ -48,19 +48,39 @@ class NodeAcl
     AccessGroup
   ###  
   createAccessGroup: (data, callback) ->
-    callback('Function not ready')
+    accessGroupModule = new AccessGroupModule()
+    accessGroupModule.create data, (err, accessGroupId) ->
+      if err?
+        callback(err)
+      else
+        callback(null,accessGroupId)
     return
 
   readAccessGroup: (data, callback) ->
-    callback('Function not ready')
+    accessGroupModule = new AccessGroupModule()
+    accessGroupModule.read data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null,result)
     return
 
   updateAccessGroup: (data, callback) ->
-    callback('Function not ready')
+    accessGroupModule = new AccessGroupModule()
+    accessGroupModule.update data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return 
 
   deleteAccessGroup: (data, callback) ->
-    callback('Function not ready')
+    accessGroupModule = new AccessGroupModule()
+    accessGroupModule.delete data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return 
 
   ###
