@@ -118,6 +118,10 @@ buf.push('>');
 buf.push('<h1>');
 buf.push('Shortlisted Requests');
 buf.push('</h1>');
+buf.push('<div');
+buf.push(attrs({ "class": ('items') }));
+buf.push('>');
+buf.push('</div>');
 buf.push('</section>');
 buf.push('<section');
 buf.push(attrs({ 'id':('manage-selected-access'), "class": ('items') }));
@@ -125,6 +129,10 @@ buf.push('>');
 buf.push('<h1>');
 buf.push('Selected Access');
 buf.push('</h1>');
+buf.push('<div');
+buf.push(attrs({ "class": ('items') }));
+buf.push('>');
+buf.push('</div>');
 buf.push('</section>');
 buf.push('<span');
 buf.push(attrs({ "class": ('shadow') + ' ' + ('shadow-left') }));
@@ -251,25 +259,167 @@ buf.push('</section>');
 buf.push('</div>');
 buf.push('</section>');
 buf.push('<aside');
-buf.push(attrs({ 'id':('define-info-pane'), "class": ('access-info') }));
+buf.push(attrs({ 'id':('define-info-pane') }));
 buf.push('>');
 buf.push('<div');
 buf.push(attrs({ "class": ('col-inner') }));
 buf.push('>');
+buf.push('</div>');
+buf.push('</aside>');
+buf.push('</div>');
+}
+return buf.join("");
+};
+nacl.templates.form = function anonymous(locals) {
+var attrs = jade.attrs, escape = jade.escape;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<h1>');
+var __val__ = title
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</h1>');
+buf.push('<p>');
+buf.push('');
+buf.push('<label');
+buf.push(attrs({ 'for':("form-name") }));
+buf.push('>');
+buf.push('');
+buf.push('Name ');
+buf.push('\n');
+buf.push('<small>');
+buf.push('(Human readable name)');
+buf.push('</small>');
+buf.push('</label>');
+buf.push('<input');
+buf.push(attrs({ 'id':('form-name'), 'type':("text"), 'name':("name"), 'value':(name) }));
+buf.push('/>');
+buf.push('</p>');
+buf.push('<p>');
+buf.push('');
+buf.push('<label');
+buf.push(attrs({ 'for':("form-slug") }));
+buf.push('>');
+buf.push('');
+buf.push('Slug');
+buf.push('\n');
+buf.push('<small>');
+buf.push('(Machine readable name)');
+buf.push('</small>');
+buf.push('</label>');
+buf.push('<input');
+buf.push(attrs({ 'id':('form-slug'), 'type':("text"), 'name':("slug"), 'value':(slug) }));
+buf.push('/>');
+buf.push('</p>');
+buf.push('<p>');
+buf.push('<label');
+buf.push(attrs({ 'for':("form-desc") }));
+buf.push('>');
+buf.push('');
+buf.push('Description');
+buf.push('\n');
+buf.push('</label>');
+buf.push('<textarea');
+buf.push(attrs({ 'id':('form-desc'), 'name':("desc") }));
+buf.push('>');
+var __val__ = desc
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</textarea>');
+buf.push('</p>');
+ if (item == 'access')
+{
+buf.push('<p>');
+buf.push('<label');
+buf.push(attrs({ 'for':("form-enable") }));
+buf.push('>');
+buf.push('Enable access?');
+buf.push('\n');
+buf.push('</label>');
+buf.push('<input');
+buf.push(attrs({ 'id':('form-enable'), 'type':("checkbox"), 'name':("enable"), 'checked':(enable) }));
+buf.push('/>');
+buf.push('</p>');
+}
+buf.push('<p>');
+buf.push('<input');
+buf.push(attrs({ 'id':('form-submit'), 'type':("submit"), 'value':("Submit") }));
+buf.push('/>');
+buf.push('</p>');
+ if (typeof id != 'undefined')
+{
+buf.push('<input');
+buf.push(attrs({ 'type':("hidden"), 'value':(id) }));
+buf.push('/>');
+}
+}
+return buf.join("");
+};
+nacl.templates.info = function anonymous(locals) {
+var attrs = jade.attrs, escape = jade.escape;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<a');
+buf.push(attrs({ 'href':("#/define/" + (type) + "/" + (_id) + "/update"), "class": ('define-edit-button') }));
+buf.push('>');
+buf.push('Edit Access');
+buf.push('</a>');
+buf.push('<a');
+buf.push(attrs({ 'href':("#/define/" + (type) + "/" + (_id) + "/delete"), "class": ('define-delete-button') }));
+buf.push('>');
+buf.push('Delete Access');
+buf.push('</a>');
 buf.push('<hgroup>');
 buf.push('<h2>');
 buf.push('Access group details:');
 buf.push('</h2>');
 buf.push('<h1>');
-buf.push('Player');
+var __val__ = name
+buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</h1>');
 buf.push('</hgroup>');
+buf.push('<h3>');
+buf.push('Slug');
+buf.push('</h3>');
+buf.push('<p>');
+var __val__ = slug
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</p>');
 buf.push('<h3>');
 buf.push('Description');
 buf.push('</h3>');
 buf.push('<p>');
-buf.push('Lorem ipsum dolor sit amet consectetur adipiscing elit.');
+var __val__ = desc
+buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</p>');
+ if (type == 'access')
+{
+buf.push('<p>');
+var __val__ = enable
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</p>');
+buf.push('<h3>');
+buf.push('Enabled?');
+buf.push('</h3>');
+ if (enable == 'on' || enable == true)
+{
+buf.push('<p');
+buf.push(attrs({ "class": ('enabled') }));
+buf.push('>');
+buf.push('Enabled');
+buf.push('</p>');
+}
+ else
+{
+buf.push('<p');
+buf.push(attrs({ "class": ('disabled') }));
+buf.push('>');
+buf.push('Disabled');
+buf.push('</p>');
+}
+}
+ if (type == 'accessGroup')
+{
 buf.push('<h3>');
 buf.push('Access permissions');
 buf.push('</h3>');
@@ -307,69 +457,7 @@ buf.push('>');
 buf.push('Deny');
 buf.push('</dd>');
 buf.push('</dl>');
-buf.push('</div>');
-buf.push('</aside>');
-buf.push('</div>');
 }
-return buf.join("");
-};
-nacl.templates.form = function anonymous(locals) {
-var attrs = jade.attrs, escape = jade.escape;
-var buf = [];
-with (locals || {}) {
-var interp;
-buf.push('<h1>');
-var __val__ = title
-buf.push(escape(null == __val__ ? "" : __val__));
-buf.push('</h1>');
-buf.push('<p>');
-buf.push('');
-buf.push('<label');
-buf.push(attrs({ 'for':("form-name") }));
-buf.push('>');
-buf.push('Name');
-buf.push('</label>');
-buf.push('<input');
-buf.push(attrs({ 'id':('form-name'), 'type':("text"), 'name':("name"), 'value':(name) }));
-buf.push('/>');
-buf.push('</p>');
-buf.push('<p>');
-buf.push('');
-buf.push('<label');
-buf.push(attrs({ 'for':("form-slug") }));
-buf.push('>');
-buf.push('Slug');
-buf.push('</label>');
-buf.push('<input');
-buf.push(attrs({ 'id':('form-slug'), 'type':("text"), 'name':("slug"), 'value':(slug) }));
-buf.push('/>');
-buf.push('</p>');
-buf.push('<p>');
-buf.push('<label');
-buf.push(attrs({ 'for':("form-desc") }));
-buf.push('>');
-buf.push('Description');
-buf.push('</label>');
-buf.push('<textarea');
-buf.push(attrs({ 'id':('form-desc'), 'name':("desc"), 'value':(desc) }));
-buf.push('>');
-buf.push('</textarea>');
-buf.push('</p>');
-buf.push('<p>');
-buf.push('<label');
-buf.push(attrs({ 'for':("form-enable") }));
-buf.push('>');
-buf.push('Enabled');
-buf.push('</label>');
-buf.push('<input');
-buf.push(attrs({ 'id':('form-enable'), 'type':("checkbox"), 'name':("enable"), 'checked':(enable) }));
-buf.push('/>');
-buf.push('</p>');
-buf.push('<p>');
-buf.push('<input');
-buf.push(attrs({ 'id':('form-submit'), 'type':("submit"), 'value':("Submit") }));
-buf.push('/>');
-buf.push('</p>');
 }
 return buf.join("");
 };

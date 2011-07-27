@@ -1,15 +1,25 @@
 h1= title
 p 
-  label(for="form-name") Name
+  label(for="form-name") 
+    | Name 
+    small (Human readable name)
   input#form-name(type="text", name="name", value=name)
 p 
-  label(for="form-slug") Slug
+  label(for="form-slug") 
+    | Slug
+    small (Machine readable name)
   input#form-slug(type="text", name="slug", value=slug)
 p
-  label(for="form-desc") Description
-  textarea#form-desc(name="desc", value=desc)
-p
-  label(for="form-enable") Enabled
-  input#form-enable(type="checkbox", name="enable", checked=enable)
+  label(for="form-desc") 
+    | Description
+  textarea#form-desc(name="desc")= desc
+- if (item == 'access')
+  p
+    label(for="form-enable")
+      | Enable access?
+    input#form-enable(type="checkbox", name="enable", checked=enable)
 p
   input#form-submit(type="submit", value="Submit")
+ 
+- if (typeof id != 'undefined')
+  input(type="hidden", value=id)

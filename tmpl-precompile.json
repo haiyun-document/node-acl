@@ -9,7 +9,8 @@
             "templates": [
                 "manage",
                 "define",
-                "form"
+                "form",
+                "info"
             ]
         }
     ]

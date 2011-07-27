@@ -38,3 +38,7 @@ task 'test', 'Runs all tests', ->
 task 'compile-jade', 'compiles all jade templates into JS', ->
   compile = exec '../tmpl-precompile/bin/tmpl-precompile tmpl-precompile.json'
   printOutput(compile)
+  
+task 'docs', 'generates docs using Docco', ->
+  docs = exec 'docco src/lib/*.coffee'
+  printOutput(docs)
