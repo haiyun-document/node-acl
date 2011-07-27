@@ -25,20 +25,35 @@
     border-color lighten($c-dark-cool, 80%)
     
   .access-add
+    replace-text('icon_add.png', inline-block)
     float right
-    margin-top gap(0.5)
-    padding-right gap(1.2)
-    background url(path('icon_add.png')) right center no-repeat
-    font-size(1.2)
+    &:hover
+      background-image url(path('icon_add_hover.png'))
 
 #define-delete
   inline-block()
-  width 48px
-  height 48px
-  padding gap(1)
-  border 5px solid #ccc
-  &.active
-    border-color #fc0
+  replace-text('icon_delete.png')
+  margin-top gap(0.5)
+  float right
+  &:hover, &.active
+    background-image url(path('icon_delete_hover.png'))
+
+.define-edit-button, .define-delete-button
+  position absolute
+  top gap(1)
+
+.define-edit-button
+  replace-text('icon_edit.png')
+  right gap(1) + 48px
+  &:hover
+    background-image url(path('icon_edit_hover.png'))
+    
+.define-delete-button
+  replace-text('icon_delete.png')
+  right gap(1)
+  &:hover
+    background-image url(path('icon_delete_hover.png'))
+
 
 #define-info-pane
   .col-inner

@@ -6,6 +6,11 @@ getModel = (type, id) ->
     when 'access-group'
       return accessGroups.get(id)
 
+refreshCollections = ->
+  accesses.view.render()
+  accessGroups.view.render()
+  requests.view.render()
+
 # Hash routes
 class Router extends Backbone.Router
   routes:
@@ -14,7 +19,8 @@ class Router extends Backbone.Router
     '/define': 'define'
     '/define/:item/create': 'defineCreate'
     '/define/:item/:id': 'defineViewInfo'
-    '/define/:item/:id/update': 'defineUpdate'
+    '/define/:item/:id/update': 'update'
+    '/define/:item/:id/delete': 'delete'
   
   gotoParent: (parent) ->
     href = window.location.hash
@@ -50,7 +56,7 @@ class Router extends Backbone.Router
     m = getModel(item, id)
     m.infoView.render()
     
-  defineUpdate: (item, id) ->
+  update: (item, id) ->
     if $('#define').length < 1
       @gotoParent('/define')
     options = 
@@ -59,6 +65,18 @@ class Router extends Backbone.Router
       page: 'define'
     _.extend(options, getModel(item,id).toJSON())
     new nacl.views.FormView(options)
+    
+  delete: (item, id) ->
+    m = getModel(item,id)
+    $el = $(m.view.el)
+    self = @
+    m.destroy 
+      success: (res, model) ->
+        $el.remove()
+        self.navigate '/define'
+        $.meow message: 'Item deleted successfully!'
+      error: (res, model) ->
+        $.meow message: 'Error deleting item:' + res
 
 # Document ready initialization
 $ ->

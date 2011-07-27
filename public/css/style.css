@@ -315,8 +315,8 @@ nav li {
 .add-filter {
   background: url("/images/icon_add.png") no-repeat center;
   display: block;
-  width: 21px;
-  height: 21px;
+  width: 36px;
+  height: 36px;
   text-indent: -9999px;
   border: none;
 }
@@ -591,27 +591,65 @@ body {
   border-color: #006180;
 }
 #define .access-add {
+  background: url("/images/icon_add.png") no-repeat center;
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  text-indent: -9999px;
+  border: none;
   float: right;
-  margin-top: 10.5px;
-  padding-right: 25.2px;
-  background: url("/images/icon_add.png") right center no-repeat;
-  font-size: 16.8px;
-  line-height: 1.5em;
+}
+#define .access-add:hover {
+  background-image: url("/images/icon_add_hover.png");
 }
 #define-delete {
   display: inline-block;
   vertical-align: top;
-  width: 48px;
-  height: 48px;
-  padding: 21px;
-  border: 5px solid #ccc;
+  background: url("/images/icon_delete.png") no-repeat center;
+  display: block;
+  width: 36px;
+  height: 36px;
+  text-indent: -9999px;
+  border: none;
+  margin-top: 10.5px;
+  float: right;
 }
 .ie7 #define-delete {
   display: inline;
   zoom: 1;
 }
+#define-delete:hover,
 #define-delete.active {
-  border-color: #fc0;
+  background-image: url("/images/icon_delete_hover.png");
+}
+.define-edit-button,
+.define-delete-button {
+  position: absolute;
+  top: 21px;
+}
+.define-edit-button {
+  background: url("/images/icon_edit.png") no-repeat center;
+  display: block;
+  width: 36px;
+  height: 36px;
+  text-indent: -9999px;
+  border: none;
+  right: 69px;
+}
+.define-edit-button:hover {
+  background-image: url("/images/icon_edit_hover.png");
+}
+.define-delete-button {
+  background: url("/images/icon_delete.png") no-repeat center;
+  display: block;
+  width: 36px;
+  height: 36px;
+  text-indent: -9999px;
+  border: none;
+  right: 21px;
+}
+.define-delete-button:hover {
+  background-image: url("/images/icon_delete_hover.png");
 }
 #define-info-pane .col-inner {
   background: #faf0dc;

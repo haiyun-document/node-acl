@@ -230,37 +230,11 @@
           return callback();
         }
       ], function(err) {
-        $(self.el).find('#define-delete').droppable({
-          accept: '.item-access-group, .item-access',
+        $(self.el).find('.item-access-group').droppable({
+          accept: '.item-access',
           activeClass: 'active',
           drop: function(e, ui) {
-            var $i, item, m, _i, _len, _ref, _results;
-            _ref = ui.draggable;
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              item = _ref[_i];
-              $i = $(item);
-              _results.push($i.hasClass('item-access') ? (m = accesses.get($i.data('id')), m.destroy({
-                success: function(model, response) {
-                  alert('Access removed successfully!');
-                  accesses.view.render();
-                  return $i.remove();
-                },
-                error: function(model, response) {
-                  return alert('Error removing access:' + response);
-                }
-              })) : $(item).hasClass('item-access-group') ? (m = accessGroups.get($(item).data('id')), m.destroy({
-                success: function(model, response) {
-                  alert('Access group removed successfully!');
-                  accessGroups.view.render();
-                  return $i.remove();
-                },
-                error: function(model, response) {
-                  return alert('Error removing access:' + response);
-                }
-              })) : void 0);
-            }
-            return _results;
+            return console.log(ui);
           }
         });
         $(self.el).find(defineAccess).append(accesses.view.el);
@@ -281,7 +255,7 @@
       name: '',
       slug: '',
       desc: '',
-      enable: true
+      enable: 'on'
     };
     FormView.prototype.tagName = 'form';
     FormView.prototype.className = 'define-form';
@@ -325,27 +299,37 @@
     FormView.prototype.submitCreate = function() {
       var attrs;
       attrs = $(this.el).serializeObject();
+      attrs.enable = attrs.enable || false;
       switch (this.options.item) {
         case 'access':
           return accesses.create(attrs, {
             success: function(model, response) {
-              alert('Access created successfully!');
               accesses.view.render();
-              return $(defineAccess).append(accesses.view.el);
+              $(defineAccess).append(accesses.view.el);
+              return $.meow({
+                message: 'Access created successfully!'
+              });
             },
             error: function(model, response) {
-              return alert('Error creating access:' + response);
+              return $.meow({
+                message: 'Error creating access:' + response
+              });
             }
           });
         case 'access-group':
           return accessGroups.create(attrs, {
             success: function(model, response) {
-              alert('Access group created successfully!');
               accessGroups.view.render();
-              return $(defineAccessGroup).append(accessGroups.view.el);
+              $(defineAccessGroup).append(accessGroups.view.el);
+              return $.meow({
+                message: 'Access group created successfully!'
+              });
             },
             error: function(model, response) {
-              return alert('Error creating access group:' + response);
+              $.meow({
+                message: 'Error creating access group:' + response
+              });
+              return alert();
             }
           });
       }
@@ -354,14 +338,19 @@
       var attrs, m;
       attrs = $(this.el).serializeObject();
       m = getModel(this.options.item, this.options._id);
+      attrs.enable = attrs.enable || false;
       return m.save(attrs, {
         success: function(model, response) {
-          alert('Access updated successfully!');
           m.view.render();
-          return app.navigate("/define/" + (m.get('type')) + "/" + (m.get('_id')), true);
+          app.navigate("/define/" + (m.get('type')) + "/" + (m.get('_id')), true);
+          return $.meow({
+            message: 'Access updated successfully!'
+          });
         },
         error: function(model, response) {
-          return alert('Error creating access group:' + response);
+          return $.meow({
+            message: 'Error creating access group:' + response
+          });
         }
       });
     };

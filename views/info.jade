@@ -1,4 +1,5 @@
-a#define-edit-button(href="#/define/#{type}/#{_id}/update") Edit Access
+a.define-edit-button(href="#/define/#{type}/#{_id}/update") Edit Access
+a.define-delete-button(href="#/define/#{type}/#{_id}/delete") Delete Access
 
 hgroup
   h2 Access group details:
@@ -11,8 +12,9 @@ h3 Description
 p= desc
 
 - if (type == 'access')
+  p= enable
   h3 Enabled?
-  - if (enable)
+  - if (enable == 'on' || enable == true)
     p.enabled Enabled
   - else
     p.disabled Disabled

@@ -219,11 +219,6 @@ buf.push('<header>');
 buf.push('<h1>');
 buf.push('Access Definitions ');
 buf.push('</h1>');
-buf.push('<a');
-buf.push(attrs({ 'id':('define-delete'), 'href':("#") }));
-buf.push('>');
-buf.push('Delete');
-buf.push('</a>');
 buf.push('</header>');
 buf.push('<section');
 buf.push(attrs({ 'id':('define-access') }));
@@ -365,9 +360,14 @@ var buf = [];
 with (locals || {}) {
 var interp;
 buf.push('<a');
-buf.push(attrs({ 'id':('define-edit-button'), 'href':("#/define/" + (type) + "/" + (_id) + "/update") }));
+buf.push(attrs({ 'href':("#/define/" + (type) + "/" + (_id) + "/update"), "class": ('define-edit-button') }));
 buf.push('>');
 buf.push('Edit Access');
+buf.push('</a>');
+buf.push('<a');
+buf.push(attrs({ 'href':("#/define/" + (type) + "/" + (_id) + "/delete"), "class": ('define-delete-button') }));
+buf.push('>');
+buf.push('Delete Access');
 buf.push('</a>');
 buf.push('<hgroup>');
 buf.push('<h2>');
@@ -394,10 +394,14 @@ buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</p>');
  if (type == 'access')
 {
+buf.push('<p>');
+var __val__ = enable
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</p>');
 buf.push('<h3>');
 buf.push('Enabled?');
 buf.push('</h3>');
- if (enable)
+ if (enable == 'on' || enable == true)
 {
 buf.push('<p');
 buf.push(attrs({ "class": ('enabled') }));

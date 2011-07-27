@@ -189,32 +189,11 @@ class DefineView extends Backbone.View
         callback()
     ]
     , (err) ->
-      $(self.el).find('#define-delete').droppable
-        accept: '.item-access-group, .item-access'
+      $(self.el).find('.item-access-group').droppable
+        accept: '.item-access'
         activeClass: 'active'
         drop: (e, ui) ->
-          for item in ui.draggable
-            $i = $(item)
-            if $i.hasClass('item-access')
-              m = accesses.get $i.data('id')
-              m.destroy 
-                success: (model, response) ->
-                  alert('Access removed successfully!')
-                  accesses.view.render()
-                  $i.remove()
-                error: (model, response) ->
-                  alert('Error removing access:' + response)
-            else if $(item).hasClass('item-access-group')
-              m = accessGroups.get $(item).data('id')
-              m.destroy 
-                success: (model, response) ->
-                  alert('Access group removed successfully!')
-                  accessGroups.view.render()
-                  $i.remove()
-                error: (model, response) ->
-                  alert('Error removing access:' + response)
-              
-          
+          console.log ui
       
       $(self.el).find(defineAccess).append(accesses.view.el)
       $(self.el).find(defineAccessGroup).append(accessGroups.view.el)
@@ -227,7 +206,7 @@ class FormView extends Backbone.View
     name: ''
     slug: ''
     desc: ''
-    enable: true
+    enable: 'on'
   tagName: 'form'
   className: 'define-form'
   events: 
@@ -254,35 +233,38 @@ class FormView extends Backbone.View
     e.preventDefault()
   submitCreate: ->
     attrs = $(@el).serializeObject()
+    attrs.enable = attrs.enable || false
     switch @options.item
       when 'access'
         accesses.create attrs,
           success: (model, response) ->
-            alert('Access created successfully!')
             accesses.view.render()
             $(defineAccess).append(accesses.view.el)
+            $.meow message: 'Access created successfully!'
           error: (model, response) ->
-            alert('Error creating access:' + response)
+            $.meow message: 'Error creating access:' + response
             
       when 'access-group'
         accessGroups.create attrs,
           success: (model, response) ->
-            alert('Access group created successfully!')
             accessGroups.view.render()
             $(defineAccessGroup).append(accessGroups.view.el)
+            $.meow message: 'Access group created successfully!'
           error: (model, response) ->
-            alert('Error creating access group:' + response)
+            $.meow message: 'Error creating access group:' + response
+            alert()
             
   submitUpdate: ->
     attrs = $(@el).serializeObject()
     m = getModel(@options.item, @options._id)
+    attrs.enable = attrs.enable || false
     m.save attrs,
       success: (model, response) ->
-        alert('Access updated successfully!')
         m.view.render()
         app.navigate "/define/#{m.get('type')}/#{m.get('_id')}", true
+        $.meow message: 'Access updated successfully!'
       error: (model, response) ->
-        alert('Error creating access group:' + response)
+        $.meow message: 'Error creating access group:' + response
     
 
 class InfoView extends Backbone.View
