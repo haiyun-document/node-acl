@@ -1,5 +1,5 @@
 (function() {
-  var Router;
+  var Router, getModel;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -7,6 +7,14 @@
     child.prototype = new ctor;
     child.__super__ = parent.prototype;
     return child;
+  };
+  getModel = function(type, id) {
+    switch (type) {
+      case 'access':
+        return accesses.get(id);
+      case 'access-group':
+        return accessGroups.get(id);
+    }
   };
   Router = (function() {
     __extends(Router, Backbone.Router);
@@ -17,7 +25,9 @@
       '/': 'manage',
       '/manage': 'manage',
       '/define': 'define',
-      '/define/:item/create': 'defineCreate'
+      '/define/:item/create': 'defineCreate',
+      '/define/:item/:id': 'defineViewInfo',
+      '/define/:item/:id/update': 'defineUpdate'
     };
     Router.prototype.gotoParent = function(parent) {
       var href;
@@ -53,10 +63,31 @@
       };
       return new nacl.views.FormView(options);
     };
+    Router.prototype.defineViewInfo = function(item, id) {
+      var m;
+      if ($('#define').length < 1) {
+        this.gotoParent('/define');
+      }
+      m = getModel(item, id);
+      return m.infoView.render();
+    };
+    Router.prototype.defineUpdate = function(item, id) {
+      var options;
+      if ($('#define').length < 1) {
+        this.gotoParent('/define');
+      }
+      options = {
+        item: item,
+        action: 'update',
+        page: 'define'
+      };
+      _.extend(options, getModel(item, id).toJSON());
+      return new nacl.views.FormView(options);
+    };
     return Router;
   })();
   $(function() {
-    new Router();
+    window.app = new Router();
     Backbone.history.start();
     if (window.location.href.indexOf('#/') < 0) {
       return window.location.href = "" + window.location.protocol + "//" + window.location.host + "#" + window.location.pathname;

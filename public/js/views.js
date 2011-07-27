@@ -1,5 +1,5 @@
 (function() {
-  var $content, CollectionView, DefineView, FormView, ItemView, ManageView, appendItems, changePage, defineAccess, defineAccessGroup, manageAccess, manageAccessGroup, manageRequest, manageShortlistAccess, manageShortlistRequest, mapLinks, setContentHeight, smallTemplates, startLoad, stopLoad;
+  var $content, CollectionView, DefineView, FormView, InfoView, ItemView, ManageView, appendItems, changePage, defineAccess, defineAccessGroup, getModel, manageAccess, manageAccessGroup, manageRequest, manageShortlistAccess, manageShortlistRequest, mapLinks, setContentHeight, smallTemplates, startLoad, stopLoad;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -9,15 +9,20 @@
     return child;
   };
   window.nacl = window.nacl || {};
+  getModel = function(type, id) {
+    switch (type) {
+      case 'access':
+        return accesses.get(id);
+      case 'access-group':
+        return accessGroups.get(id);
+    }
+  };
   window.nacl.templates = window.nacl.templates || {};
   smallTemplates = {
     requestItem: function(locals) {
       return "<img src=\"" + locals.img + "\" class=\"item-thumb\" height=\"36\" width=\"36\">\n<h2 class=\"item-name\">" + locals.name + "</h2>";
     },
     accessItem: function(locals) {
-      return "<h2 class=\"item-name\">" + locals.name + "</h2>";
-    },
-    accessGroupItem: function(locals) {
       return "<h2 class=\"item-name\">" + locals.name + "</h2>";
     }
   };
@@ -99,6 +104,9 @@
       ItemView.__super__.constructor.apply(this, arguments);
     }
     ItemView.prototype.tagName = 'article';
+    ItemView.prototype.events = {
+      'click': 'renderInfoView'
+    };
     ItemView.prototype.render = function() {
       $(this.el).data('slug', this.model.get('slug'));
       $(this.el).data('id', this.model.get('_id'));
@@ -109,6 +117,12 @@
         cursor: 'crosshair',
         zIndex: 3000
       });
+    };
+    ItemView.prototype.renderInfoView = function() {
+      var id, type;
+      type = this.model.get('type');
+      id = this.model.get('_id');
+      return app.navigate("/define/" + type + "/" + id, true);
     };
     return ItemView;
   })();
@@ -160,49 +174,33 @@
           return callback();
         }
       ], function(err) {
+        var dropCallback;
+        dropCallback = function(e, ui) {
+          $(e.target).append(ui.draggable);
+          return $(ui.draggable).css({
+            left: 'auto',
+            top: 'auto'
+          });
+        };
         $(self.el).find('#manage-selected-request .items, #manage-items-request .items').droppable({
           accept: '.item-request',
           activeClass: 'active',
-          drop: function(e, ui) {
-            $(e.target).append(ui.draggable);
-            return $(ui.draggable).css({
-              left: 'auto',
-              top: 'auto'
-            });
-          }
+          drop: dropCallback
         });
         $(self.el).find('#manage-selected-access .items').droppable({
           accept: '.item-access-group, .item-access',
           activeClass: 'active',
-          drop: function(e, ui) {
-            $(e.target).append(ui.draggable);
-            return $(ui.draggable).css({
-              left: 'auto',
-              top: 'auto'
-            });
-          }
+          drop: dropCallback
         });
         $(self.el).find('#manage-items-access-group .items').droppable({
           accept: '.item-access-group',
           activeClass: 'active',
-          drop: function(e, ui) {
-            $(e.target).append(ui.draggable);
-            return $(ui.draggable).css({
-              left: 'auto',
-              top: 'auto'
-            });
-          }
+          drop: dropCallback
         });
         $(self.el).find('#manage-items-access .items').droppable({
           accept: '.item-access',
           activeClass: 'active',
-          drop: function(e, ui) {
-            $(e.target).append(ui.draggable);
-            return $(ui.draggable).css({
-              left: 'auto',
-              top: 'auto'
-            });
-          }
+          drop: dropCallback
         });
         return changePage(self.el);
       });
@@ -315,11 +313,21 @@
       return $('#define-info-pane .col-inner').empty().append(this.el);
     };
     FormView.prototype.submit = function(e) {
-      var a, ag, attrs;
+      switch (this.options.action) {
+        case 'create':
+          this.submitCreate();
+          break;
+        case 'update':
+          this.submitUpdate();
+      }
+      return e.preventDefault();
+    };
+    FormView.prototype.submitCreate = function() {
+      var attrs;
       attrs = $(this.el).serializeObject();
       switch (this.options.item) {
         case 'access':
-          a = accesses.create(attrs, {
+          return accesses.create(attrs, {
             success: function(model, response) {
               alert('Access created successfully!');
               accesses.view.render();
@@ -329,9 +337,8 @@
               return alert('Error creating access:' + response);
             }
           });
-          break;
         case 'access-group':
-          ag = accessGroups.create(attrs, {
+          return accessGroups.create(attrs, {
             success: function(model, response) {
               alert('Access group created successfully!');
               accessGroups.view.render();
@@ -342,15 +349,47 @@
             }
           });
       }
-      return e.preventDefault();
+    };
+    FormView.prototype.submitUpdate = function() {
+      var attrs, m;
+      attrs = $(this.el).serializeObject();
+      m = getModel(this.options.item, this.options._id);
+      return m.save(attrs, {
+        success: function(model, response) {
+          alert('Access updated successfully!');
+          m.view.render();
+          return app.navigate("/define/" + (m.get('type')) + "/" + (m.get('_id')), true);
+        },
+        error: function(model, response) {
+          return alert('Error creating access group:' + response);
+        }
+      });
     };
     return FormView;
+  })();
+  InfoView = (function() {
+    __extends(InfoView, Backbone.View);
+    function InfoView() {
+      InfoView.__super__.constructor.apply(this, arguments);
+    }
+    InfoView.prototype.tmpl = nacl.templates.info;
+    InfoView.prototype.className = "access-info";
+    InfoView.prototype.events = {
+      'click #define-edit-access': 'edit'
+    };
+    InfoView.prototype.render = function() {
+      $(this.el).html(this.tmpl.call(this, this.model.toJSON()));
+      return $('#define-info-pane .col-inner').empty().append(this.el);
+    };
+    InfoView.prototype.edit = function() {};
+    return InfoView;
   })();
   window.nacl.views = {
     ItemView: ItemView,
     CollectionView: CollectionView,
     ManageView: ManageView,
     DefineView: DefineView,
-    FormView: FormView
+    FormView: FormView,
+    InfoView: InfoView
   };
 }).call(this);

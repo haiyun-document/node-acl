@@ -66,8 +66,12 @@ app.post "/access", (req, res) ->
   
 # Update access
 app.put "/access/:id", (req, res) ->
-  data = req.body
-  data.id = req.params.id
+  data =
+    id : req.params.id
+    newSlug: req.body.slug
+    newName: req.body.name
+    newDesc: req.body.desc
+    newEnable: req.body.enable
 
   nodeAcl.updateAccess data, (err, result) ->
     if err? then res.send err
@@ -105,8 +109,13 @@ app.post "/access-group", (req, res) ->
 
 # Update access group
 app.put "/access-group/:id", (req, res) ->
-  data = req.body
-  data.id = req.params.id
+  data =
+    id : req.params.id
+    newSlug: req.body.slug
+    newName: req.body.name
+    newDesc: req.body.desc
+    newEnable: req.body.enable
+    newAccess: req.body.access || []
 
   nodeAcl.updateAccessGroup data, (err, result) ->
     if err? then res.send err

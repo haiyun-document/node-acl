@@ -73,8 +73,13 @@
   });
   app.put("/access/:id", function(req, res) {
     var data;
-    data = req.body;
-    data.id = req.params.id;
+    data = {
+      id: req.params.id,
+      newSlug: req.body.slug,
+      newName: req.body.name,
+      newDesc: req.body.desc,
+      newEnable: req.body.enable
+    };
     return nodeAcl.updateAccess(data, function(err, result) {
       if (err != null) {
         return res.send(err);
@@ -133,8 +138,14 @@
   });
   app.put("/access-group/:id", function(req, res) {
     var data;
-    data = req.body;
-    data.id = req.params.id;
+    data = {
+      id: req.params.id,
+      newSlug: req.body.slug,
+      newName: req.body.name,
+      newDesc: req.body.desc,
+      newEnable: req.body.enable,
+      newAccess: req.body.access || []
+    };
     return nodeAcl.updateAccessGroup(data, function(err, result) {
       if (err != null) {
         return res.send(err);

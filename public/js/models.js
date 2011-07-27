@@ -15,11 +15,17 @@
       Request.__super__.constructor.apply(this, arguments);
     }
     Request.prototype.idAttribute = '_id';
+    Request.prototype.defaults = {
+      type: 'request'
+    };
     Request.prototype.initialize = function() {
-      return this.view = new nacl.views.ItemView({
+      this.view = new nacl.views.ItemView({
         model: this,
         tmpl: nacl.templates.requestItem,
         className: 'item-request'
+      });
+      return this.infoView = new nacl.views.InfoView({
+        model: this
       });
     };
     return Request;
@@ -30,11 +36,17 @@
       Access.__super__.constructor.apply(this, arguments);
     }
     Access.prototype.idAttribute = '_id';
+    Access.prototype.defaults = {
+      type: 'access'
+    };
     Access.prototype.initialize = function() {
-      return this.view = new nacl.views.ItemView({
+      this.view = new nacl.views.ItemView({
         model: this,
         tmpl: nacl.templates.accessItem,
         className: 'item-access'
+      });
+      return this.infoView = new nacl.views.InfoView({
+        model: this
       });
     };
     return Access;
@@ -45,11 +57,17 @@
       AccessGroup.__super__.constructor.apply(this, arguments);
     }
     AccessGroup.prototype.idAttribute = '_id';
+    AccessGroup.prototype.defaults = {
+      type: 'access-group'
+    };
     AccessGroup.prototype.initialize = function() {
-      return this.view = new nacl.views.ItemView({
+      this.view = new nacl.views.ItemView({
         model: this,
-        tmpl: nacl.templates.accessGroupItem,
+        tmpl: nacl.templates.accessItem,
         className: 'item-access-group'
+      });
+      return this.infoView = new nacl.views.InfoView({
+        model: this
       });
     };
     return AccessGroup;

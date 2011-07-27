@@ -269,61 +269,6 @@ buf.push('>');
 buf.push('<div');
 buf.push(attrs({ "class": ('col-inner') }));
 buf.push('>');
-buf.push('<div');
-buf.push(attrs({ "class": ('access-info') }));
-buf.push('>');
-buf.push('<hgroup>');
-buf.push('<h2>');
-buf.push('Access group details:');
-buf.push('</h2>');
-buf.push('<h1>');
-buf.push('Player');
-buf.push('</h1>');
-buf.push('</hgroup>');
-buf.push('<h3>');
-buf.push('Description');
-buf.push('</h3>');
-buf.push('<p>');
-buf.push('Lorem ipsum dolor sit amet consectetur adipiscing elit.');
-buf.push('</p>');
-buf.push('<h3>');
-buf.push('Access permissions');
-buf.push('</h3>');
-buf.push('<dl>');
-buf.push('<dt>');
-buf.push('Login');
-buf.push('</dt>');
-buf.push('<dd');
-buf.push(attrs({ "class": ('allow') }));
-buf.push('>');
-buf.push('Allow');
-buf.push('</dd>');
-buf.push('<dt>');
-buf.push('View Profile');
-buf.push('</dt>');
-buf.push('<dd');
-buf.push(attrs({ "class": ('allow') }));
-buf.push('>');
-buf.push('Allow');
-buf.push('</dd>');
-buf.push('<dt>');
-buf.push('Check credits');
-buf.push('</dt>');
-buf.push('<dd');
-buf.push(attrs({ "class": ('allow') }));
-buf.push('>');
-buf.push('Allow');
-buf.push('</dd>');
-buf.push('<dt>');
-buf.push('Access admin area');
-buf.push('</dt>');
-buf.push('<dd');
-buf.push(attrs({ "class": ('deny') }));
-buf.push('>');
-buf.push('Deny');
-buf.push('</dd>');
-buf.push('</dl>');
-buf.push('</div>');
 buf.push('</div>');
 buf.push('</aside>');
 buf.push('</div>');
@@ -380,8 +325,10 @@ buf.push('Description');
 buf.push('\n');
 buf.push('</label>');
 buf.push('<textarea');
-buf.push(attrs({ 'id':('form-desc'), 'name':("desc"), 'value':(desc) }));
+buf.push(attrs({ 'id':('form-desc'), 'name':("desc") }));
 buf.push('>');
+var __val__ = desc
+buf.push(escape(null == __val__ ? "" : __val__));
 buf.push('</textarea>');
 buf.push('</p>');
  if (item == 'access')
@@ -408,6 +355,104 @@ buf.push('</p>');
 buf.push('<input');
 buf.push(attrs({ 'type':("hidden"), 'value':(id) }));
 buf.push('/>');
+}
+}
+return buf.join("");
+};
+nacl.templates.info = function anonymous(locals) {
+var attrs = jade.attrs, escape = jade.escape;
+var buf = [];
+with (locals || {}) {
+var interp;
+buf.push('<a');
+buf.push(attrs({ 'id':('define-edit-button'), 'href':("#/define/" + (type) + "/" + (_id) + "/update") }));
+buf.push('>');
+buf.push('Edit Access');
+buf.push('</a>');
+buf.push('<hgroup>');
+buf.push('<h2>');
+buf.push('Access group details:');
+buf.push('</h2>');
+buf.push('<h1>');
+var __val__ = name
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</h1>');
+buf.push('</hgroup>');
+buf.push('<h3>');
+buf.push('Slug');
+buf.push('</h3>');
+buf.push('<p>');
+var __val__ = slug
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</p>');
+buf.push('<h3>');
+buf.push('Description');
+buf.push('</h3>');
+buf.push('<p>');
+var __val__ = desc
+buf.push(escape(null == __val__ ? "" : __val__));
+buf.push('</p>');
+ if (type == 'access')
+{
+buf.push('<h3>');
+buf.push('Enabled?');
+buf.push('</h3>');
+ if (enable)
+{
+buf.push('<p');
+buf.push(attrs({ "class": ('enabled') }));
+buf.push('>');
+buf.push('Enabled');
+buf.push('</p>');
+}
+ else
+{
+buf.push('<p');
+buf.push(attrs({ "class": ('disabled') }));
+buf.push('>');
+buf.push('Disabled');
+buf.push('</p>');
+}
+}
+ if (type == 'accessGroup')
+{
+buf.push('<h3>');
+buf.push('Access permissions');
+buf.push('</h3>');
+buf.push('<dl>');
+buf.push('<dt>');
+buf.push('Login');
+buf.push('</dt>');
+buf.push('<dd');
+buf.push(attrs({ "class": ('allow') }));
+buf.push('>');
+buf.push('Allow');
+buf.push('</dd>');
+buf.push('<dt>');
+buf.push('View Profile');
+buf.push('</dt>');
+buf.push('<dd');
+buf.push(attrs({ "class": ('allow') }));
+buf.push('>');
+buf.push('Allow');
+buf.push('</dd>');
+buf.push('<dt>');
+buf.push('Check credits');
+buf.push('</dt>');
+buf.push('<dd');
+buf.push(attrs({ "class": ('allow') }));
+buf.push('>');
+buf.push('Allow');
+buf.push('</dd>');
+buf.push('<dt>');
+buf.push('Access admin area');
+buf.push('</dt>');
+buf.push('<dd');
+buf.push(attrs({ "class": ('deny') }));
+buf.push('>');
+buf.push('Deny');
+buf.push('</dd>');
+buf.push('</dl>');
 }
 }
 return buf.join("");

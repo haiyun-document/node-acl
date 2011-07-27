@@ -4,27 +4,36 @@ window.nacl = window.nacl || {}
 # Models
 class Request extends Backbone.Model
   idAttribute: '_id'
+  defaults: 
+    type: 'request'
   initialize: ->
     @view = new nacl.views.ItemView
       model: @
       tmpl: nacl.templates.requestItem
       className: 'item-request'
+    @infoView = new nacl.views.InfoView({model: @})
 
 class Access extends Backbone.Model
   idAttribute: '_id'
+  defaults: 
+    type: 'access'
   initialize: ->
     @view = new nacl.views.ItemView
       model: @
       tmpl: nacl.templates.accessItem
       className: 'item-access'
+    @infoView = new nacl.views.InfoView({model: @})
     
 class AccessGroup extends Backbone.Model
   idAttribute: '_id'
+  defaults: 
+    type: 'access-group'
   initialize: ->
     @view = new nacl.views.ItemView
       model: @
-      tmpl: nacl.templates.accessGroupItem
+      tmpl: nacl.templates.accessItem
       className: 'item-access-group'
+    @infoView = new nacl.views.InfoView({model: @})
 
     
 # Collections

@@ -1,3 +1,11 @@
+# Helper for get model
+getModel = (type, id) ->
+  switch type
+    when 'access'
+      return accesses.get(id)
+    when 'access-group'
+      return accessGroups.get(id)
+
 # Hash routes
 class Router extends Backbone.Router
   routes:
@@ -5,6 +13,8 @@ class Router extends Backbone.Router
     '/manage': 'manage'
     '/define': 'define'
     '/define/:item/create': 'defineCreate'
+    '/define/:item/:id': 'defineViewInfo'
+    '/define/:item/:id/update': 'defineUpdate'
   
   gotoParent: (parent) ->
     href = window.location.hash
@@ -33,11 +43,27 @@ class Router extends Backbone.Router
       action: 'create'
       page: 'define'
     new nacl.views.FormView(options)
+    
+  defineViewInfo: (item, id) ->
+    if $('#define').length < 1
+      @gotoParent('/define')
+    m = getModel(item, id)
+    m.infoView.render()
+    
+  defineUpdate: (item, id) ->
+    if $('#define').length < 1
+      @gotoParent('/define')
+    options = 
+      item: item
+      action: 'update'
+      page: 'define'
+    _.extend(options, getModel(item,id).toJSON())
+    new nacl.views.FormView(options)
 
 # Document ready initialization
 $ ->
   # Initialize routes
-  new Router()
+  window.app = new Router()
   Backbone.history.start()
   
   # Redirect to hashes

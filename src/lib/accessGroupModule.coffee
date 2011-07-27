@@ -41,7 +41,7 @@ class AccessGroupModule
   
   update: (data, callback) ->
     try
-      if data.slug? and (data.newSlug? or data.newName? or data.newEnable? or data.newDesc? or data.newAccess)
+      if data.id? and (data.newSlug? or data.newName? or data.newEnable? or data.newDesc? or data.newAccess)
         AccessGroup.findOne {_id: data.id}, (err, res) ->
           if err?
             callback(1010)

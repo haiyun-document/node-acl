@@ -1,0 +1,30 @@
+a#define-edit-button(href="#/define/#{type}/#{_id}/update") Edit Access
+
+hgroup
+  h2 Access group details:
+  h1= name
+
+h3 Slug
+p= slug
+
+h3 Description
+p= desc
+
+- if (type == 'access')
+  h3 Enabled?
+  - if (enable)
+    p.enabled Enabled
+  - else
+    p.disabled Disabled
+
+- if (type == 'accessGroup')
+  h3 Access permissions
+  dl
+    dt Login
+    dd.allow Allow
+    dt View Profile
+    dd.allow Allow
+    dt Check credits
+    dd.allow Allow
+    dt Access admin area
+    dd.deny Deny
