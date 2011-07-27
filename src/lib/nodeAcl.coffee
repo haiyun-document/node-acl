@@ -1,7 +1,8 @@
 _ = require('underscore')
 {AccessModule} = require('./accessModule')
 {AccessGroupModule} = require('./accessGroupModule')
-{Access,AccessGroup} = require('./models')
+{RequestModule} = require('./requestModule')
+#{Access,AccessGroup,Request} = require('./models')
 
 ###
 relationship = require('relationshipModule')
@@ -120,22 +121,49 @@ nodeAcl =
     return 
 
   ###
-    Grant/Revoke
+    Assign/Unassign
   ###
-  grantAccess: (data, callback) ->
-    callback('Function not ready')
+
+  # `setRequestAccess`: update request object's access
+  # data: 
+  #
+  #     _id: (Required) Request ObjectId
+  #     access: (Required) Array, [{_id:'1234567890',perm:'allow'},{_id:'67676766',perm:'deny'}]
+  #
+  setRequestAccess: (data, callback) ->
+    requestModule = new RequestModule()
+    requestModule.setRequestAccess data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return
 
-  revokeAccess: (data, callback) ->
-    callback('Function not ready')
+  deleteRequestAccess: (data, callback) ->
+    requestModule = new RequestModule()
+    requestModule.deleteRequestAccess data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return
 
-  grantAccessGroup: (data, callback) ->
-    callback('Function not ready')
+  setRequestAccessGroup: (data, callback) ->
+    requestModule = new RequestModule()
+    requestModule.setRequestAccessGroup data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return 
 
-  revokeAccessGroup: (data, callback) ->
-    callback('Function not ready')
+  deleteRequestAccessGroup: (data, callback) ->
+    requestModule = new RequestModule()
+    requestModule.deleteRequestAccessGroup data, (err, result) ->
+      if err?
+        callback(err)
+      else
+        callback(null)
     return
 
 

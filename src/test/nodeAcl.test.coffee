@@ -1,7 +1,7 @@
 vows = require('vows')
 assert = require('assert')
 nodeAcl = require('../lib/nodeAcl')
-{Access,AccessGroup} = require('../lib/models')
+{Access,AccessGroup,Request} = require('../lib/models')
 EventPromise = require('events').EventEmitter
 _ = require('underscore')
 
@@ -43,17 +43,15 @@ invalidDeleteMock =
   slug1: 'updatedSlug'
 
 
-###
-testAccess = [
+
+testRequest = [
   {
-    _id: '4e1c70d0ec27dba3de555601'
-    slug: 'testAccess'
-    name: 'Test Access Name'
-    desc: 'Test Access Desc'
-    enable: true
+    _id: '4e2fb6deb33baece6c1842cc'
+    name: 'ManChoy'
+    type: 'player'
   },
 ]
-
+###
 testAccessGroup = [
   {
     _id: '4e1c70d0ec27dba3de555605'
@@ -66,22 +64,14 @@ testAccessGroup = [
       perm: 'allow'
   },
 ]
-
+###
 
 insertStubs = (callback) ->
-  access = new Access()
-  _.extend(access, testAccess[0])
-  access.save (err) ->
+  request = new Request()
+  _.extend(request, testRequest[0])
+  request.save (err) ->
     callback(null, true)
-    unless err?
-      accessGroup = new AccessGroup()
-      _.extend(accessGroup, testAccessGroup[0])
-      accessGroup.save (err) ->
-        callback(null, true)
-    else
-      callback(err)
  
-  
 setUp =
   'Setting up mocks':
     topic: ->
@@ -97,12 +87,15 @@ setUp =
 tearDown =
   'Tearing down mocks...':
     topic: {}
-    'Tearing down access mock':
+    'Tearing down request mock':
       topic: ->
-        Access.remove({}, this.callback)
+        Request.remove({}, this.callback)
         return
-      'Tear down access mock': (err,res) ->
+      'Tear down request mock': (err,res) ->
         assert.isNull err
+      'Deleted all test stubs': ->
+        module.exports = {}  
+    ###    
     'Tearing down access group mock':
       topic: ->
         AccessGroup.remove({}, this.callback)
@@ -199,7 +192,7 @@ End of Manage Access Test
 Manage Access Group Test
 ###
 
-manageAccessGroupTest = vows.describe "NodeACL Test: AccessGroup"
+manageAccessGroupTest = vows.describe "NodeACL Test: AccessGroup Module"
 
 
 perfectAddGroupMock =
@@ -361,10 +354,199 @@ invalidDeleteAccessGroup =
 End of Manage Access Group Test
 ###
 
+###
+Assign/unassign access test
+###
+
+assignAccessTest = vows.describe 'NodeACL Test: Assign/Unassign Access Module'
+
+
+perfectAssignAccessMock =
+  _id: '4e2fb6deb33baece6c1842cc'
+  access: [
+    {_id: '4e1c70d0ec27dba3de555614', perm: 'allow'},
+    {_id: '4e1c70d0ec27dba3de555615', perm: 'deny'}
+  ]
+
+invalidRequestIdMock =
+  access: [
+    {_id: '4e1c70d0ec27dba3de555614', perm: 'allow'},
+    {_id: '4e1c70d0ec27dba3de555615', perm: 'deny'}
+  ]
+
+invalidAccessMock =
+  _id: '4e2fb6deb33baece6c1842cc'
+
+
+invalidRequestIdDeleteRequestAccessMock =
+  _id: '4e2fb6deb33baece6c1842c0'
+  
+invalidAccessDeleteRequestAccessMock =
+  _id: '4e2fb6deb33baece6c1842cc'
+  access: []
+  
+perfectDeleteRequestAccessMock = 
+  _id: '4e2fb6deb33baece6c1842cc'
+  access: ['4e1c70d0ec27dba3de555614', '4e1c70d0ec27dba3de555615']
+
+perfectAssignAccess =
+  'Perfect assignment of access to request object: --':
+    topic: perfectAssignAccessMock
+    'Given request id and access are valid':
+      topic: (data) ->
+        nodeAcl.setRequestAccess(data, this.callback)
+        return
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+
+invalidRequestIdAssignAccess =
+  'Assign access to invalid request object: --':
+    topic: invalidRequestIdMock
+    'Given request id is invalid':
+      topic: (data) ->
+        nodeAcl.setRequestAccess(data, this.callback)
+        return
+      'THEN it should return an error code 1013': (err, res) ->
+        assert.equal err, 1013
+
+invalidAccessAssignAccess =
+  'Assign access to invalid access: --':
+    topic: invalidAccessMock
+    'Given access is invalid':
+      topic: (data) ->
+        nodeAcl.setRequestAccess(data, this.callback)
+        return
+      'THEN it should return an error code 1013': (err, res) ->
+        assert.equal err, 1013
+
+invalidRequestIdDeleteRequestAccess = 
+  'Delete given access associated with request object: --':
+    topic: invalidRequestIdDeleteRequestAccessMock
+    'Given request id is invalid':
+      topic: (data) ->
+        nodeAcl.deleteRequestAccess(data, this.callback)
+        return
+      'THEN it should return an error code 1018': (err, res) ->
+        assert.equal err, 1018
+
+invalidAccessDeleteRequestAccess = 
+  'Delete given access associated with request object: --':
+    topic: invalidAccessDeleteRequestAccessMock
+    'Given access id is invalid':
+      topic: (data) ->
+        nodeAcl.deleteRequestAccess(data, this.callback)
+        return
+      'THEN it should return an error code 1018': (err, res) ->
+        assert.equal err, 1018
+
+perfectDeleteRequestAccess = 
+  'Delete access associated request object: --':
+    topic: perfectDeleteRequestAccessMock
+    'Given request id and access are valid':
+      topic: (data) ->
+        nodeAcl.deleteRequestAccess(data, this.callback)
+        return
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+###
+End of assign/unassign access test
+###
+
+###
+Assign/unassign access group test
+###
+
+assignAccessGroupTest = vows.describe 'NodeACL Test: Assign/Unassign Access Group Module'
+
+
+perfectAssignAccessGroupMock =
+  _id: '4e2fb6deb33baece6c1842cc'
+  accessGroup: ['4e1c70d0ec27dba3de555614','4e1c70d0ec27dba3de555615']
+
+invalidRequestIdAccessGroupMock =
+  accessGroup: ['4e1c70d0ec27dba3de555614','4e1c70d0ec27dba3de555615']
+
+invalidAccessGroupMock =
+  _id: '4e2fb6deb33baece6c1842cc'
+
+
+invalidRequestIdDeleteRequestAccessGroupMock =
+  _id: '4e2fb6deb33baece6c1842c0'
+  
+invalidAccessGroupDeleteRequestAccessMock =
+  _id: '4e2fb6deb33baece6c1842cc'
+  accessGroup: []
+  
+perfectDeleteRequestAccessGroupMock = 
+  _id: '4e2fb6deb33baece6c1842cc'
+  accessGroup: ['4e1c70d0ec27dba3de555614', '4e1c70d0ec27dba3de555615']
+
+perfectAssignAccessGroup =
+  'Perfect assignment of access group to request object: --':
+    topic: perfectAssignAccessGroupMock
+    'Given request id and access group are valid':
+      topic: (data) ->
+        nodeAcl.setRequestAccessGroup(data, this.callback)
+        return
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+
+invalidRequestIdAssignAccessGroup =
+  'Assign access group to invalid request object: --':
+    topic: invalidRequestIdAccessGroupMock
+    'Given request id is invalid':
+      topic: (data) ->
+        nodeAcl.setRequestAccessGroup(data, this.callback)
+        return
+      'THEN it should return an error code 1019': (err, res) ->
+        assert.equal err, 1019
+
+invalidAccessGroupAssignAccessGroup =
+  'Assign access group to invalid access: --':
+    topic: invalidAccessGroupMock
+    'Given access is invalid':
+      topic: (data) ->
+        nodeAcl.setRequestAccessGroup(data, this.callback)
+        return
+      'THEN it should return an error code 1019': (err, res) ->
+        assert.equal err, 1019
+
+invalidRequestIdDeleteRequestAccessGroup = 
+  'Delete given access group associated with request object: --':
+    topic: invalidRequestIdDeleteRequestAccessGroupMock
+    'Given request id is invalid':
+      topic: (data) ->
+        nodeAcl.deleteRequestAccessGroup(data, this.callback)
+        return
+      'THEN it should return an error code 1024': (err, res) ->
+        assert.equal err, 1024
+
+invalidAccessDeleteRequestAccessGroup = 
+  'Delete given access group associated with request object: --':
+    topic: invalidAccessGroupDeleteRequestAccessMock
+    'Given access group id is invalid':
+      topic: (data) ->
+        nodeAcl.deleteRequestAccessGroup(data, this.callback)
+        return
+      'THEN it should return an error code 1024': (err, res) ->
+        assert.equal err, 1024
+
+perfectDeleteRequestAccessGroup = 
+  'Delete access group associated request object: --':
+    topic: perfectDeleteRequestAccessGroupMock
+    'Given request id and access group are valid':
+      topic: (data) ->
+        nodeAcl.deleteRequestAccessGroup(data, this.callback)
+        return
+      'THEN it should return no error': (err, res) ->
+        assert.isNull err
+###
+End of assign/unassign access group test
+###
 
 
 manageAccessTest
-  #.addBatch(setUp)
+  .addBatch(setUp)
   .addBatch(perfectCreateAccess)
   .addBatch(invalidCreateAccess)
   .addBatch(perfectReadOneAccess)
@@ -385,7 +567,25 @@ manageAccessGroupTest
   .addBatch(invalidUpdateAccessGroup)
   .addBatch(perfectDeleteAccessGroup)
   .addBatch(invalidDeleteAccessGroup)
-  #.addBatch(tearDown)
+  .export(module)
+
+assignAccessTest
+  .addBatch(perfectAssignAccess)
+  .addBatch(invalidRequestIdAssignAccess)
+  .addBatch(invalidAccessAssignAccess)
+  .addBatch(invalidRequestIdDeleteRequestAccess)
+  .addBatch(invalidAccessDeleteRequestAccess)
+  .addBatch(perfectDeleteRequestAccess)
+  .export(module)
+
+assignAccessGroupTest
+  .addBatch(perfectAssignAccessGroup)
+  .addBatch(invalidRequestIdAssignAccessGroup)
+  .addBatch(invalidAccessGroupAssignAccessGroup)
+  .addBatch(invalidRequestIdDeleteRequestAccessGroup)
+  .addBatch(invalidAccessDeleteRequestAccessGroup)
+  .addBatch(perfectDeleteRequestAccessGroup)
+  .addBatch(tearDown)
   .export(module)
 
 ###

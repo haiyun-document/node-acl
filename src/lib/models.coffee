@@ -32,9 +32,18 @@ AccessGroupSchema = new Schema
   createdAt: {type: Date, default: new Date()}
 
 
+RequestSchema = new Schema
+  _id: ObjectId
+  name: String
+  type: String
+  access: Array
+  accessGroup: Array
+  createdAt: {type: Date, default: new Date()}
+
 mongoose.model 'Access', AccessSchema
 mongoose.model 'AccessGroup', AccessGroupSchema
-
+mongoose.model 'Request', RequestSchema
 
 module.exports.Access = mongoose.model 'Access'
 module.exports.AccessGroup = mongoose.model 'AccessGroup'
+module.exports.Request = mongoose.model 'Request'

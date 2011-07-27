@@ -1,9 +1,9 @@
 (function() {
-  var Access, AccessGroup, EventPromise, assert, invalidAddMock, invalidCreateAccess, invalidDeleteAccess, invalidDeleteAccessGroup, invalidDeleteGroupMock, invalidDeleteMock, invalidSlugAddGroupMock, invalidSlugCreateAccessGroup, invalidUpdateAccess, invalidUpdateAccessGroup, invalidUpdateGroupMock, invalidUpdateMock, manageAccessGroupTest, manageAccessTest, nodeAcl, perfectAccessUpdateAccessGroup, perfectAccessUpdateGroupMock, perfectAddGroupMock, perfectAddMock, perfectCreateAccess, perfectCreateGroupAccess, perfectDeleteAccess, perfectDeleteAccessGroup, perfectDeleteGroupMock, perfectDeleteMock, perfectReadAllAccess, perfectReadAllAccessGroup, perfectReadAllGroupMock, perfectReadAllMock, perfectReadGroupMock, perfectReadMock, perfectReadOneAccess, perfectReadOneAccessGroup, perfectSlugUpdateAccessGroup, perfectSlugUpdateGroupMock, perfectUpdateAccess, perfectUpdateMock, vows, _, _ref;
+  var Access, AccessGroup, EventPromise, Request, assert, assignAccessGroupTest, assignAccessTest, insertStubs, invalidAccessAssignAccess, invalidAccessDeleteRequestAccess, invalidAccessDeleteRequestAccessGroup, invalidAccessDeleteRequestAccessMock, invalidAccessGroupAssignAccessGroup, invalidAccessGroupDeleteRequestAccessMock, invalidAccessGroupMock, invalidAccessMock, invalidAddMock, invalidCreateAccess, invalidDeleteAccess, invalidDeleteAccessGroup, invalidDeleteGroupMock, invalidDeleteMock, invalidRequestIdAccessGroupMock, invalidRequestIdAssignAccess, invalidRequestIdAssignAccessGroup, invalidRequestIdDeleteRequestAccess, invalidRequestIdDeleteRequestAccessGroup, invalidRequestIdDeleteRequestAccessGroupMock, invalidRequestIdDeleteRequestAccessMock, invalidRequestIdMock, invalidSlugAddGroupMock, invalidSlugCreateAccessGroup, invalidUpdateAccess, invalidUpdateAccessGroup, invalidUpdateGroupMock, invalidUpdateMock, manageAccessGroupTest, manageAccessTest, nodeAcl, perfectAccessUpdateAccessGroup, perfectAccessUpdateGroupMock, perfectAddGroupMock, perfectAddMock, perfectAssignAccess, perfectAssignAccessGroup, perfectAssignAccessGroupMock, perfectAssignAccessMock, perfectCreateAccess, perfectCreateGroupAccess, perfectDeleteAccess, perfectDeleteAccessGroup, perfectDeleteGroupMock, perfectDeleteMock, perfectDeleteRequestAccess, perfectDeleteRequestAccessGroup, perfectDeleteRequestAccessGroupMock, perfectDeleteRequestAccessMock, perfectReadAllAccess, perfectReadAllAccessGroup, perfectReadAllGroupMock, perfectReadAllMock, perfectReadGroupMock, perfectReadMock, perfectReadOneAccess, perfectReadOneAccessGroup, perfectSlugUpdateAccessGroup, perfectSlugUpdateGroupMock, perfectUpdateAccess, perfectUpdateMock, setUp, tearDown, testRequest, vows, _, _ref;
   vows = require('vows');
   assert = require('assert');
   nodeAcl = require('../lib/nodeAcl');
-  _ref = require('../lib/models'), Access = _ref.Access, AccessGroup = _ref.AccessGroup;
+  _ref = require('../lib/models'), Access = _ref.Access, AccessGroup = _ref.AccessGroup, Request = _ref.Request;
   EventPromise = require('events').EventEmitter;
   _ = require('underscore');
   /*
@@ -39,17 +39,14 @@
   invalidDeleteMock = {
     slug1: 'updatedSlug'
   };
-  /*
-  testAccess = [
+  testRequest = [
     {
-      _id: '4e1c70d0ec27dba3de555601'
-      slug: 'testAccess'
-      name: 'Test Access Name'
-      desc: 'Test Access Desc'
-      enable: true
-    },
-  ]
-  
+      _id: '4e2fb6deb33baece6c1842cc',
+      name: 'ManChoy',
+      type: 'player'
+    }
+  ];
+  /*
   testAccessGroup = [
     {
       _id: '4e1c70d0ec27dba3de555605'
@@ -62,43 +59,50 @@
         perm: 'allow'
     },
   ]
-  
-  
-  insertStubs = (callback) ->
-    access = new Access()
-    _.extend(access, testAccess[0])
-    access.save (err) ->
-      callback(null, true)
-      unless err?
-        accessGroup = new AccessGroup()
-        _.extend(accessGroup, testAccessGroup[0])
-        accessGroup.save (err) ->
-          callback(null, true)
-      else
-        callback(err)
-   
-    
-  setUp =
-    'Setting up mocks':
-      topic: ->
-        promise = new EventPromise()
-        insertStubs (err, result) ->
-          if err? then promise.emit('error', err)
-          else promise.emit('success', result)
-        promise
-      'Done setting up stubs, initializing test:': (err, result) ->
-        assert.isNull err
-        assert.isTrue result
-  
-  tearDown =
-    'Tearing down mocks...':
-      topic: {}
-      'Tearing down access mock':
-        topic: ->
-          Access.remove({}, this.callback)
-          return
-        'Tear down access mock': (err,res) ->
-          assert.isNull err
+  */
+  insertStubs = function(callback) {
+    var request;
+    request = new Request();
+    _.extend(request, testRequest[0]);
+    return request.save(function(err) {
+      return callback(null, true);
+    });
+  };
+  setUp = {
+    'Setting up mocks': {
+      topic: function() {
+        var promise;
+        promise = new EventPromise();
+        insertStubs(function(err, result) {
+          if (err != null) {
+            return promise.emit('error', err);
+          } else {
+            return promise.emit('success', result);
+          }
+        });
+        return promise;
+      },
+      'Done setting up stubs, initializing test:': function(err, result) {
+        assert.isNull(err);
+        return assert.isTrue(result);
+      }
+    }
+  };
+  tearDown = {
+    'Tearing down mocks...': {
+      topic: {},
+      'Tearing down request mock': {
+        topic: function() {
+          Request.remove({}, this.callback);
+        },
+        'Tear down request mock': function(err, res) {
+          return assert.isNull(err);
+        },
+        'Deleted all test stubs': function() {
+          return module.exports = {};
+        }
+      }
+      /*    
       'Tearing down access group mock':
         topic: ->
           AccessGroup.remove({}, this.callback)
@@ -107,7 +111,9 @@
           assert.isNull err
         'Deleted all test stubs': ->
             module.exports = {}
-  */
+      */
+    }
+  };
   perfectCreateAccess = {
     'Add new access to ACL db: --': {
       topic: perfectAddMock,
@@ -219,7 +225,7 @@
   /*
   Manage Access Group Test
   */
-  manageAccessGroupTest = vows.describe("NodeACL Test: AccessGroup");
+  manageAccessGroupTest = vows.describe("NodeACL Test: AccessGroup Module");
   perfectAddGroupMock = {
     slug: 'VIPAccessGroup',
     name: 'VIP Access Group',
@@ -403,8 +409,238 @@
   /*
   End of Manage Access Group Test
   */
-  manageAccessTest.addBatch(perfectCreateAccess).addBatch(invalidCreateAccess).addBatch(perfectReadOneAccess).addBatch(perfectReadAllAccess).addBatch(perfectUpdateAccess).addBatch(invalidUpdateAccess).addBatch(perfectDeleteAccess).addBatch(invalidDeleteAccess)["export"](module);
+  /*
+  Assign/unassign access test
+  */
+  assignAccessTest = vows.describe('NodeACL Test: Assign/Unassign Access Module');
+  perfectAssignAccessMock = {
+    _id: '4e2fb6deb33baece6c1842cc',
+    access: [
+      {
+        _id: '4e1c70d0ec27dba3de555614',
+        perm: 'allow'
+      }, {
+        _id: '4e1c70d0ec27dba3de555615',
+        perm: 'deny'
+      }
+    ]
+  };
+  invalidRequestIdMock = {
+    access: [
+      {
+        _id: '4e1c70d0ec27dba3de555614',
+        perm: 'allow'
+      }, {
+        _id: '4e1c70d0ec27dba3de555615',
+        perm: 'deny'
+      }
+    ]
+  };
+  invalidAccessMock = {
+    _id: '4e2fb6deb33baece6c1842cc'
+  };
+  invalidRequestIdDeleteRequestAccessMock = {
+    _id: '4e2fb6deb33baece6c1842c0'
+  };
+  invalidAccessDeleteRequestAccessMock = {
+    _id: '4e2fb6deb33baece6c1842cc',
+    access: []
+  };
+  perfectDeleteRequestAccessMock = {
+    _id: '4e2fb6deb33baece6c1842cc',
+    access: ['4e1c70d0ec27dba3de555614', '4e1c70d0ec27dba3de555615']
+  };
+  perfectAssignAccess = {
+    'Perfect assignment of access to request object: --': {
+      topic: perfectAssignAccessMock,
+      'Given request id and access are valid': {
+        topic: function(data) {
+          nodeAcl.setRequestAccess(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          return assert.isNull(err);
+        }
+      }
+    }
+  };
+  invalidRequestIdAssignAccess = {
+    'Assign access to invalid request object: --': {
+      topic: invalidRequestIdMock,
+      'Given request id is invalid': {
+        topic: function(data) {
+          nodeAcl.setRequestAccess(data, this.callback);
+        },
+        'THEN it should return an error code 1013': function(err, res) {
+          return assert.equal(err, 1013);
+        }
+      }
+    }
+  };
+  invalidAccessAssignAccess = {
+    'Assign access to invalid access: --': {
+      topic: invalidAccessMock,
+      'Given access is invalid': {
+        topic: function(data) {
+          nodeAcl.setRequestAccess(data, this.callback);
+        },
+        'THEN it should return an error code 1013': function(err, res) {
+          return assert.equal(err, 1013);
+        }
+      }
+    }
+  };
+  invalidRequestIdDeleteRequestAccess = {
+    'Delete given access associated with request object: --': {
+      topic: invalidRequestIdDeleteRequestAccessMock,
+      'Given request id is invalid': {
+        topic: function(data) {
+          nodeAcl.deleteRequestAccess(data, this.callback);
+        },
+        'THEN it should return an error code 1018': function(err, res) {
+          return assert.equal(err, 1018);
+        }
+      }
+    }
+  };
+  invalidAccessDeleteRequestAccess = {
+    'Delete given access associated with request object: --': {
+      topic: invalidAccessDeleteRequestAccessMock,
+      'Given access id is invalid': {
+        topic: function(data) {
+          nodeAcl.deleteRequestAccess(data, this.callback);
+        },
+        'THEN it should return an error code 1018': function(err, res) {
+          return assert.equal(err, 1018);
+        }
+      }
+    }
+  };
+  perfectDeleteRequestAccess = {
+    'Delete access associated request object: --': {
+      topic: perfectDeleteRequestAccessMock,
+      'Given request id and access are valid': {
+        topic: function(data) {
+          nodeAcl.deleteRequestAccess(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          return assert.isNull(err);
+        }
+      }
+    }
+  };
+  /*
+  End of assign/unassign access test
+  */
+  /*
+  Assign/unassign access group test
+  */
+  assignAccessGroupTest = vows.describe('NodeACL Test: Assign/Unassign Access Group Module');
+  perfectAssignAccessGroupMock = {
+    _id: '4e2fb6deb33baece6c1842cc',
+    accessGroup: ['4e1c70d0ec27dba3de555614', '4e1c70d0ec27dba3de555615']
+  };
+  invalidRequestIdAccessGroupMock = {
+    accessGroup: ['4e1c70d0ec27dba3de555614', '4e1c70d0ec27dba3de555615']
+  };
+  invalidAccessGroupMock = {
+    _id: '4e2fb6deb33baece6c1842cc'
+  };
+  invalidRequestIdDeleteRequestAccessGroupMock = {
+    _id: '4e2fb6deb33baece6c1842c0'
+  };
+  invalidAccessGroupDeleteRequestAccessMock = {
+    _id: '4e2fb6deb33baece6c1842cc',
+    accessGroup: []
+  };
+  perfectDeleteRequestAccessGroupMock = {
+    _id: '4e2fb6deb33baece6c1842cc',
+    accessGroup: ['4e1c70d0ec27dba3de555614', '4e1c70d0ec27dba3de555615']
+  };
+  perfectAssignAccessGroup = {
+    'Perfect assignment of access group to request object: --': {
+      topic: perfectAssignAccessGroupMock,
+      'Given request id and access group are valid': {
+        topic: function(data) {
+          nodeAcl.setRequestAccessGroup(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          return assert.isNull(err);
+        }
+      }
+    }
+  };
+  invalidRequestIdAssignAccessGroup = {
+    'Assign access group to invalid request object: --': {
+      topic: invalidRequestIdAccessGroupMock,
+      'Given request id is invalid': {
+        topic: function(data) {
+          nodeAcl.setRequestAccessGroup(data, this.callback);
+        },
+        'THEN it should return an error code 1019': function(err, res) {
+          return assert.equal(err, 1019);
+        }
+      }
+    }
+  };
+  invalidAccessGroupAssignAccessGroup = {
+    'Assign access group to invalid access: --': {
+      topic: invalidAccessGroupMock,
+      'Given access is invalid': {
+        topic: function(data) {
+          nodeAcl.setRequestAccessGroup(data, this.callback);
+        },
+        'THEN it should return an error code 1019': function(err, res) {
+          return assert.equal(err, 1019);
+        }
+      }
+    }
+  };
+  invalidRequestIdDeleteRequestAccessGroup = {
+    'Delete given access group associated with request object: --': {
+      topic: invalidRequestIdDeleteRequestAccessGroupMock,
+      'Given request id is invalid': {
+        topic: function(data) {
+          nodeAcl.deleteRequestAccessGroup(data, this.callback);
+        },
+        'THEN it should return an error code 1024': function(err, res) {
+          return assert.equal(err, 1024);
+        }
+      }
+    }
+  };
+  invalidAccessDeleteRequestAccessGroup = {
+    'Delete given access group associated with request object: --': {
+      topic: invalidAccessGroupDeleteRequestAccessMock,
+      'Given access group id is invalid': {
+        topic: function(data) {
+          nodeAcl.deleteRequestAccessGroup(data, this.callback);
+        },
+        'THEN it should return an error code 1024': function(err, res) {
+          return assert.equal(err, 1024);
+        }
+      }
+    }
+  };
+  perfectDeleteRequestAccessGroup = {
+    'Delete access group associated request object: --': {
+      topic: perfectDeleteRequestAccessGroupMock,
+      'Given request id and access group are valid': {
+        topic: function(data) {
+          nodeAcl.deleteRequestAccessGroup(data, this.callback);
+        },
+        'THEN it should return no error': function(err, res) {
+          return assert.isNull(err);
+        }
+      }
+    }
+  };
+  /*
+  End of assign/unassign access group test
+  */
+  manageAccessTest.addBatch(setUp).addBatch(perfectCreateAccess).addBatch(invalidCreateAccess).addBatch(perfectReadOneAccess).addBatch(perfectReadAllAccess).addBatch(perfectUpdateAccess).addBatch(invalidUpdateAccess).addBatch(perfectDeleteAccess).addBatch(invalidDeleteAccess)["export"](module);
   manageAccessGroupTest.addBatch(perfectCreateGroupAccess).addBatch(invalidSlugCreateAccessGroup).addBatch(perfectReadOneAccessGroup).addBatch(perfectReadAllAccessGroup).addBatch(perfectSlugUpdateAccessGroup).addBatch(perfectAccessUpdateAccessGroup).addBatch(invalidUpdateAccessGroup).addBatch(perfectDeleteAccessGroup).addBatch(invalidDeleteAccessGroup)["export"](module);
+  assignAccessTest.addBatch(perfectAssignAccess).addBatch(invalidRequestIdAssignAccess).addBatch(invalidAccessAssignAccess).addBatch(invalidRequestIdDeleteRequestAccess).addBatch(invalidAccessDeleteRequestAccess).addBatch(perfectDeleteRequestAccess)["export"](module);
+  assignAccessGroupTest.addBatch(perfectAssignAccessGroup).addBatch(invalidRequestIdAssignAccessGroup).addBatch(invalidAccessGroupAssignAccessGroup).addBatch(invalidRequestIdDeleteRequestAccessGroup).addBatch(invalidAccessDeleteRequestAccessGroup).addBatch(perfectDeleteRequestAccessGroup).addBatch(tearDown)["export"](module);
   /*
   perfectAssignAccessNoConflict = 
     'Assign access to player without conflict: --':
