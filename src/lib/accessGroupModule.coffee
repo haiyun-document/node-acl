@@ -24,7 +24,7 @@ class AccessGroupModule
   read: (data, callback) ->
     try
       if data.slug?
-        AccessGroup.findOne {slug: data.slug}, (err, res) ->
+        AccessGroup.findOne {_id: data.id}, (err, res) ->
           if err?
             callback(1010)
           else
@@ -42,7 +42,7 @@ class AccessGroupModule
   update: (data, callback) ->
     try
       if data.slug? and (data.newSlug? or data.newName? or data.newEnable? or data.newDesc? or data.newAccess)
-        AccessGroup.findOne {slug: data.slug}, (err, res) ->
+        AccessGroup.findOne {_id: data.id}, (err, res) ->
           if err?
             callback(1010)
           else
@@ -73,8 +73,8 @@ class AccessGroupModule
 
   delete: (data, callback) ->
     try
-      if data.slug?
-        AccessGroup.remove {slug: data.slug}, (err, res) ->
+      if data.id?
+        AccessGroup.remove {_id: data.id}, (err, res) ->
           if err?
             callback(1012)
           else

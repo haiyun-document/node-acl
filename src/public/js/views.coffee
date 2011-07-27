@@ -90,9 +90,10 @@ $.fn.serializeObject = ->
 
 # Individual item views
 class ItemView extends Backbone.View
-  tagName: 'article'
+  tagName: 'article'  
   render: ->
     $(@el).data('slug', @model.get('slug'))
+    $(@el).data('id', @model.get('_id'))
     $(@el).html(@options.tmpl(@model.toJSON()))
     $(@el).draggable
       revert: 'invalid'
@@ -186,16 +187,28 @@ class DefineView extends Backbone.View
         accept: '.item-access-group, .item-access'
         activeClass: 'active'
         drop: (e, ui) ->
-          if $(ui.draggable[0]).hasClass('item-access-group') > 0
-            delUrl = '/access-group'
-          else if $(ui.draggable[0]).hasClass('item-access') > 0
-            delUrl = '/access'
+          for item in ui.draggable
+            $i = $(item)
+            if $i.hasClass('item-access')
+              m = accesses.get $i.data('id')
+              m.destroy 
+                success: (model, response) ->
+                  alert('Access removed successfully!')
+                  accesses.view.render()
+                  $i.remove()
+                error: (model, response) ->
+                  alert('Error removing access:' + response)
+            else if $(item).hasClass('item-access-group')
+              m = accessGroups.get $(item).data('id')
+              m.destroy 
+                success: (model, response) ->
+                  alert('Access group removed successfully!')
+                  accessGroups.view.render()
+                  $i.remove()
+                error: (model, response) ->
+                  alert('Error removing access:' + response)
+              
           
-          $.ajax
-            type: 'DEL'
-            url: delUrl + '/' + $(ui.draggable[0]).data('slug')
-            success: (data) ->
-              alert('Item successfully deleted!')
       
       $(self.el).find(defineAccess).append(accesses.view.el)
       $(self.el).find(defineAccessGroup).append(accessGroups.view.el)

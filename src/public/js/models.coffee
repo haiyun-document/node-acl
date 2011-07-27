@@ -9,7 +9,7 @@ class Request extends Backbone.Model
       model: @
       tmpl: nacl.templates.requestItem
       className: 'item-request'
-    
+
 class Access extends Backbone.Model
   idAttribute: '_id'
   initialize: ->

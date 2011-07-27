@@ -23,7 +23,7 @@ class AccessModule
   read: (data, callback) ->
     try
       if data.slug?
-        Access.findOne {slug: data.slug}, (err, res) ->
+        Access.findOne {_id: data.id}, (err, res) ->
           if err?
             callback(1004)
           else
@@ -41,7 +41,7 @@ class AccessModule
   update: (data, callback) ->
     try
       if data.slug? and (data.newSlug? or data.newName? or data.newEnable? or data.newDesc?)
-        Access.findOne {slug: data.slug}, (err, res) ->
+        Access.findOne {_id: data.id}, (err, res) ->
           if err?
             callback(1004)
           else
@@ -70,8 +70,8 @@ class AccessModule
 
   delete: (data, callback) ->
     try
-      if data.slug?
-        Access.remove {slug: data.slug}, (err, res) ->
+      if data.id?
+        Access.remove {_id: data.id}, (err, res) ->
           if err?
             callback(1007)
           else

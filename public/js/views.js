@@ -101,6 +101,7 @@
     ItemView.prototype.tagName = 'article';
     ItemView.prototype.render = function() {
       $(this.el).data('slug', this.model.get('slug'));
+      $(this.el).data('id', this.model.get('_id'));
       $(this.el).html(this.options.tmpl(this.model.toJSON()));
       return $(this.el).draggable({
         revert: 'invalid',
@@ -235,19 +236,33 @@
           accept: '.item-access-group, .item-access',
           activeClass: 'active',
           drop: function(e, ui) {
-            var delUrl;
-            if ($(ui.draggable[0]).hasClass('item-access-group') > 0) {
-              delUrl = '/access-group';
-            } else if ($(ui.draggable[0]).hasClass('item-access') > 0) {
-              delUrl = '/access';
+            var $i, item, m, _i, _len, _ref, _results;
+            _ref = ui.draggable;
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              item = _ref[_i];
+              $i = $(item);
+              _results.push($i.hasClass('item-access') ? (m = accesses.get($i.data('id')), m.destroy({
+                success: function(model, response) {
+                  alert('Access removed successfully!');
+                  accesses.view.render();
+                  return $i.remove();
+                },
+                error: function(model, response) {
+                  return alert('Error removing access:' + response);
+                }
+              })) : $(item).hasClass('item-access-group') ? (m = accessGroups.get($(item).data('id')), m.destroy({
+                success: function(model, response) {
+                  alert('Access group removed successfully!');
+                  accessGroups.view.render();
+                  return $i.remove();
+                },
+                error: function(model, response) {
+                  return alert('Error removing access:' + response);
+                }
+              })) : void 0);
             }
-            return $.ajax({
-              type: 'DEL',
-              url: delUrl + '/' + $(ui.draggable[0]).data('slug'),
-              success: function(data) {
-                return alert('Item successfully deleted!');
-              }
-            });
+            return _results;
           }
         });
         $(self.el).find(defineAccess).append(accesses.view.el);
